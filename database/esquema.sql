@@ -150,20 +150,22 @@
 --entidades com chaves estrangeiras
     
     -- Povo
-        -- string PLANETA; <- chave estrangeira (1) <- chave primaria
-        -- string ESPECIE; <- chave estrangeira (2) <- chave primaria
+        -- string PLANETA; <- chave estrangeira (PLANETA) <- chave primaria
+        -- string ESPECIE; <- chave estrangeira (ESPECIE) <- chave primaria
         -- string tipo;* <- chave primaria
         -- int turno*; <- chave primaria
         -- int qtd;*
     
+    -- colonia
+
     -- Batalha
         -- int ID; <- chave primaria (autogerado)
-        -- string IMPÉRIO; <- chave estrangeira (1) <- unique
-        -- string PLANETA_ATACCANTE; <- chave estrangeira (1) <- unique
-        -- string TURNO; <- chave estrangeira (1) <- unique
-        -- string PLANETA_DEFENSOR; <- chave estrangeira (2) <- unique
+        -- string IMPÉRIO; <- chave estrangeira (COLONIA) <- unique
+        -- string PLANETA_ATACANTE; <- chave estrangeira (COLONIA) <- unique
+        -- string TURNO; <- chave estrangeira (COLONIA) <- unique
+        -- string PLANETA_DEFENSOR; <- chave estrangeira (PLANETA) <- unique
         -- int turno_batalha;* <- unique
-        -- string PLANETA_VENCEDOR; <- chave estrangeira (3)
+        -- string PLANETA_VENCEDOR; <- chave estrangeira (PLANETA)
         -- float violencia;*
         -- float poderio_atacante;*
         -- float poderio_defensor;*
@@ -183,8 +185,6 @@
     -- recurso_precisa_tecnologia
 
     -- industria
-
-    -- colonia
 
     -- move_povo
 
