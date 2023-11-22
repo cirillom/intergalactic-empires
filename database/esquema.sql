@@ -181,8 +181,7 @@
             turno NUMBER(4) DEFAULT 0,
             CONSTRAINT PK_CIVIL PRIMARY KEY(planeta, especie, turno),
             CONSTRAINT FK_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
-            CONSTRAINT CK_TIPO CHECK(tipo IN ('Civil', 'Militar', 'Cientista')),
-            CONSTRAINT CK_TURNO CHECK(turno >= 0)
+            CONSTRAINT CK_TIPO CHECK(tipo IN ('Civil')),
         );
     
     -- colonia
@@ -228,7 +227,7 @@
             CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
             CONSTRAINT FK_PLANETA_DEFENSOR FOREIGN KEY(planeta_defensor) REFERENCES PLANETA(nome),
             CONSTRAINT FK_PLANETA_VENCEDOR FOREIGN KEY(planeta_vencedor) REFERENCES PLANETA(nome),
-            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
+            CONSTRAINT CK_VENCEDOR CHECK(planeta_vencedor IN (planeta_atacante, planeta_defensor)), --!does this account for null?
             CONSTRAINT CK_TURNO_BATALHA CHECK(turno_batalha >= turno_inicial),
             CONSTRAINT CK_VIOLENCIA CHECK(violencia >= 0 and violencia <= 1),
             CONSTRAINT CK_PODERIO_ATACANTE CHECK(poderio_atacante >= 0),
@@ -288,7 +287,6 @@
             CONSTRAINT PK_EXPLORACAO PRIMARY KEY(imperio, planeta_explorador, turno_inicial, planeta_explorado, turno),
             CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
             CONSTRAINT FK_PLANETA_EXPLORADO FOREIGN KEY(planeta_explorado) REFERENCES PLANETA(nome),
-            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
             CONSTRAINT CK_TURNO CHECK(turno >= turno_inicial),
             CONSTRAINT CK_INCERTEZA CHECK(incerteza >= 0 and incerteza <= 1),
             CONSTRAINT CK_PODERIO_MILITAR CHECK(poderio_militar >= 0),
@@ -322,7 +320,6 @@
             CONSTRAINT PK_MOVE_RECURSO PRIMARY KEY(imperio, planeta_destino, turno_inicial, planeta_origem, recurso, turno),
             CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_destino, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
             CONSTRAINT FK_ESTOQUE FOREIGN KEY(planeta_origem, recurso, turno) REFERENCES ESTOQUE(planeta, recurso, turno),
-            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
             CONSTRAINT CK_TURNO CHECK(turno >= turno_inicial),
             CONSTRAINT CK_QTD CHECK(qtd >= 0),
             CONSTRAINT CK_QTD_NAVES CHECK(qtd_naves >= 0)
@@ -423,7 +420,6 @@
             CONSTRAINT PK_MOVE_POVO PRIMARY KEY(imperio, planeta_destino, turno_inicial, planeta_origem, especie, tipo, turno),
             CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_destino, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
             CONSTRAINT FK_POVO FOREIGN KEY(planeta_origem, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
-            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
             CONSTRAINT CK_TURNO CHECK(turno >= turno_inicial),
             CONSTRAINT CK_QTD CHECK(qtd >= 0),
             CONSTRAINT CK_QTD_NAVES CHECK(qtd_naves >= 0)
@@ -444,7 +440,7 @@
             turno NUMBER(4) DEFAULT 0,
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_POVO_MORTO_BATALHA PRIMARY KEY(id_batalha, planeta, especie, tipo, turno),
-            CONSTRAINT FK_ESTOQUE_GASTO_BATALHA FOREIGN KEY(id_batalha, planeta, especie, tipo, turno) REFERENCES ESTOQUE_GASTO_BATALHA(id_batalha, planeta, especie, tipo, turno),
+            CONSTRAINT FK_BATALHA FOREIGN KEY(id_batalha) REFERENCES BATALHA(id),
             CONSTRAINT FK_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
             CONSTRAINT CK_QTD CHECK(qtd >= 0)
         );
@@ -467,7 +463,6 @@
             CONSTRAINT FK_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
             CONSTRAINT FK_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel),
             CONSTRAINT CK_TIPO CHECK(tipo IN ('Cientista')),
-            CONSTRAINT CK_TURNO CHECK(turno >= 0)
         );
 	
     -- construcao
