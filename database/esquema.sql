@@ -152,15 +152,55 @@
     -- Povo
         -- string PLANETA; <- chave estrangeira (PLANETA) <- chave primaria
         -- string ESPECIE; <- chave estrangeira (ESPECIE) <- chave primaria
-        -- string tipo;* <- chave primaria
-        -- int turno*; <- chave primaria
+        -- string tipo; <- chave primaria
+        -- int turno; <- chave primaria
         -- int qtd;*
+        CREATE TABLE POVO(
+            planeta VARCHAR(50),
+            especie VARCHAR(50),
+            tipo VARCHAR(9),
+            turno NUMBER(4) DEFAULT 0,
+            qtd NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_POVO PRIMARY KEY(planeta, especie, tipo, turno),
+            CONSTRAINT FK_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
+            CONSTRAINT FK_ESPECIE FOREIGN KEY(especie) REFERENCES ESPECIE(nome),
+            CONSTRAINT CK_TIPO CHECK(tipo IN ('Civil', 'Militar', 'Cientista')),
+            CONSTRAINT CK_TURNO CHECK(turno >= 0),
+            CONSTRAINT CK_QTD CHECK(qtd >= 0)
+        );
+
+    -- civil
+        -- string PLANETA; <- chave estrangeira(Povo) <- chave primaria
+        -- string ESPECIO; <- chave estrangeira(Povo) <- chave primaria
+        -- string tipo* <- chave estrangeira(Povo)
+        -- int TURNO;<- chave estragengeira(Povo) <-chave primaria
+        CREATE TABLE CIVIL(
+            planeta VARCHAR(50),
+            especie VARCHAR(50),
+            tipo VARCHAR(9) NOT NULL,
+            turno NUMBER(4) DEFAULT 0,
+            CONSTRAINT PK_CIVIL PRIMARY KEY(planeta, especie, turno),
+            CONSTRAINT FK_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
+            CONSTRAINT CK_TIPO CHECK(tipo IN ('Civil', 'Militar', 'Cientista')),
+            CONSTRAINT CK_TURNO CHECK(turno >= 0)
+        );
     
     -- colonia
         -- string IMPERIO; <- chave estrangeira (IMPERIO) <- chave primaria
         -- string PLANETA; <- chave estrangeira (PLANETA) <- chave primaria
         -- int turno_inicial; <- chave primaria
         -- int turno_final;
+        CREATE TABLE COLONIA(
+            imperio VARCHAR(50),
+            planeta VARCHAR(50),
+            turno_inicial NUMBER(4) DEFAULT 0,
+            turno_final NUMBER(4) DEFAULT 0,
+            CONSTRAINT PK_COLONIA PRIMARY KEY(imperio, planeta, turno_inicial),
+            CONSTRAINT FK_IMPERIO FOREIGN KEY(imperio) REFERENCES IMPERIO(nome),
+            CONSTRAINT FK_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
+            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
+            CONSTRAINT CK_TURNO_FINAL CHECK(turno_final >= turno_inicial)
+        );
 
     -- Batalha
         -- int ID; <- chave primaria (autogerado)
@@ -173,6 +213,27 @@
         -- float violencia;*
         -- float poderio_atacante;*
         -- float poderio_defensor;*
+        CREATE TABLE BATALHA(
+            id NUMBER(12), --! auto gerado
+            imperio VARCHAR(50),
+            planeta_atacante VARCHAR(50),
+            turno_inicial NUMBER(4) DEFAULT 0,
+            planeta_defensor VARCHAR(50),
+            turno_batalha NUMBER(4) DEFAULT 0 NOT NULL,
+            planeta_vencedor VARCHAR(50),
+            violencia NUMBER(3,3) DEFAULT 0 NOT NULL,
+            poderio_atacante NUMBER(12) DEFAULT 0 NOT NULL,
+            poderio_defensor NUMBER(12) DEFAULT 0 NOT NULL,
+            CONSTRAINT PK_BATALHA PRIMARY KEY(id),
+            CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
+            CONSTRAINT FK_PLANETA_DEFENSOR FOREIGN KEY(planeta_defensor) REFERENCES PLANETA(nome),
+            CONSTRAINT FK_PLANETA_VENCEDOR FOREIGN KEY(planeta_vencedor) REFERENCES PLANETA(nome),
+            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
+            CONSTRAINT CK_TURNO_BATALHA CHECK(turno_batalha >= turno_inicial),
+            CONSTRAINT CK_VIOLENCIA CHECK(violencia >= 0 and violencia <= 1),
+            CONSTRAINT CK_PODERIO_ATACANTE CHECK(poderio_atacante >= 0),
+            CONSTRAINT CK_PODERIO_DEFENSOR CHECK(poderio_defensor >= 0)
+        );
     
     -- estoque_gasto_batalha
         -- int ID_BATALHA; <- chave estrangeira (BATALHA) <- chave primaria
@@ -180,6 +241,19 @@
         -- string RECURSO; <- chave estrangeira (RECURSO) <- chave primaria
         -- int turno; <- chave primaria
         -- int qtd*; 
+        CREATE TABLE ESTOQUE_GASTO_BATALHA(
+            id_batalha NUMBER(12),
+            planeta VARCHAR(50),
+            recurso VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            qtd NUMBER(12) DEFAULT 0 NOT NULL,
+            CONSTRAINT PK_ESTOQUE_GASTO_BATALHA PRIMARY KEY(id_batalha, planeta, recurso, turno),
+            CONSTRAINT FK_ID_BATALHA FOREIGN KEY(id_batalha) REFERENCES BATALHA(id),
+            CONSTRAINT FK_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
+            CONSTRAINT FK_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT CK_TURNO CHECK(turno >= 0),
+            CONSTRAINT CK_QTD CHECK(qtd >= 0)
+        );
 
     -- Exploracao
         -- IMPÉRIO; <- chave estrangeira (COLONIA) <- chave primaria
@@ -196,6 +270,36 @@
         -- gravidade;
         -- temperatura;
         -- fertilidade;
+        CREATE TABLE EXPLORACAO(
+            imperio VARCHAR(50),
+            planeta_explorador VARCHAR(50),
+            turno_inicial NUMBER(4) DEFAULT 0,
+            planeta_explorado VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            incerteza NUMBER(3,3) DEFAULT 0 NOT NULL,
+            poderio_militar NUMBER(12) DEFAULT 0,
+            atmosfera NUMBER(3,3) DEFAULT 0,
+            qtd_populacao NUMBER(12) DEFAULT 0,
+            qtd_estruturas NUMBER(12) DEFAULT 0,
+            qtd_agua NUMBER(3,3) DEFAULT 0,
+            gravidade NUMBER(5,2) DEFAULT 0,
+            temperatura_kelvin NUMBER(5) DEFAULT 0,
+            fertilidade NUMBER(7) DEFAULT 0,
+            CONSTRAINT PK_EXPLORACAO PRIMARY KEY(imperio, planeta_explorador, turno_inicial, planeta_explorado, turno),
+            CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
+            CONSTRAINT FK_PLANETA_EXPLORADO FOREIGN KEY(planeta_explorado) REFERENCES PLANETA(nome),
+            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
+            CONSTRAINT CK_TURNO CHECK(turno >= turno_inicial),
+            CONSTRAINT CK_INCERTEZA CHECK(incerteza >= 0 and incerteza <= 1),
+            CONSTRAINT CK_PODERIO_MILITAR CHECK(poderio_militar >= 0),
+            CONSTRAINT CK_ATMOSFERA CHECK(atmosfera >= 0),
+            CONSTRAINT CK_QTD_POPULACAO CHECK(qtd_populacao >= 0),
+            CONSTRAINT CK_QTD_ESTRUTURAS CHECK(qtd_estruturas >= 0),
+            CONSTRAINT CK_QTD_AGUA CHECK(qtd_agua >= 0),
+            CONSTRAINT CK_GRAVIDADE CHECK(gravidade >= 0),
+            CONSTRAINT CK_TEMPERATURA CHECK(temperatura_kelvin >= 0),
+            CONSTRAINT CK_FERTILIDADE CHECK(fertilidade >= 0)
+        );
 
     -- Move_recurso
         -- string IMPERIO; <- chave estrangeira (COLONIA) <- chave primaria
@@ -206,32 +310,95 @@
         -- int TURNO <- chave estrangeira (Estoque) <- chave primaria
         -- int qtd*
         -- int qtd_naves*
+        CREATE TABLE MOVE_RECURSO(
+            imperio VARCHAR(50),
+            planeta_destino VARCHAR(50),
+            turno_inicial NUMBER(4) DEFAULT 0,
+            planeta_origem VARCHAR(50),
+            recurso VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            qtd NUMBER(12) DEFAULT 0,
+            qtd_naves NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_MOVE_RECURSO PRIMARY KEY(imperio, planeta_destino, turno_inicial, planeta_origem, recurso, turno),
+            CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_destino, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
+            CONSTRAINT FK_ESTOQUE FOREIGN KEY(planeta_origem, recurso, turno) REFERENCES ESTOQUE(planeta, recurso, turno),
+            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
+            CONSTRAINT CK_TURNO CHECK(turno >= turno_inicial),
+            CONSTRAINT CK_QTD CHECK(qtd >= 0),
+            CONSTRAINT CK_QTD_NAVES CHECK(qtd_naves >= 0)
+        );
 
     -- recursos_para_estrutura
         -- string ESTRUTURA <- chave estrangeira (Estrutura) <- chave primaria
         -- string RECURSO <- chave estrangeira (Recursos) <- chave primaria
         -- int qtd*
+        CREATE TABLE RECURSO_PARA_ESTRUTURA(
+            estrutura VARCHAR(50),
+            recurso VARCHAR(50),
+            qtd NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_RECURSO_PARA_ESTRUTURA PRIMARY KEY(estrutura, recurso),
+            CONSTRAINT FK_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome),
+            CONSTRAINT FK_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT CK_QTD CHECK(qtd >= 0)
+        );
 
     -- prioridade_producao
         -- PLANETA; <- chave estrangeira (PLANETA) <- chave primaria
         -- RECURSO; <- chave estrangeira (RECURSO) <- chave primaria
         -- turno; <- chave primaria
         -- ordem; <- chave primaria
+        CREATE TABLE PRIORIDADE_PRODUCAO(
+            planeta VARCHAR(50),
+            recurso VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            ordem NUMBER(4) DEFAULT 0,
+            CONSTRAINT PK_PRIORIDADE_PRODUCAO PRIMARY KEY(planeta, recurso, turno, ordem),
+            CONSTRAINT FK_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
+            CONSTRAINT FK_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT CK_TURNO CHECK(turno >= 0),
+            CONSTRAINT CK_ORDEM CHECK(ordem >= 0)
+        );
 
     -- estoque
         -- PLANETA; <- chave estrangeira (PLANETA) <- chave primaria
         -- RECURSO;  <- chave estrangeira (RECURSO) <- chave primaria
         -- turno; <- chave primaria
         -- quantidade*;
+        CREATE TABLE ESTOQUE(
+            planeta VARCHAR(50),
+            recurso VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            quantidade NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_ESTOQUE PRIMARY KEY(planeta, recurso, turno),
+            CONSTRAINT FK_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
+            CONSTRAINT FK_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT CK_TURNO CHECK(turno >= 0),
+            CONSTRAINT CK_QUANTIDADE CHECK(quantidade >= 0)
+        );
 
     -- recurso_precisa_tecnologia
         -- string NOME;<-chave estrangeira(Tecnologia)<-chave primaria
         -- int NIVEL;<-chave estrangeira(Tecnologia)<-chave primaria
         -- string RECURSO;;<-chave estrangeira(Recursos)<-chave primaria
+        CREATE TABLE RECURSE_PRECISA_TECNOLOGIA(
+            nome VARCHAR(50),
+            nivel NUMBER(1) DEFAULT 0,
+            recurso VARCHAR(50),
+            CONSTRAINT PK_RECURSO_PRECISA_TECNOLOGIA PRIMARY KEY(nome, nivel, recurso),
+            CONSTRAINT FK_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel),
+            CONSTRAINT FK_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome)
+        );
 	
     -- industria
         -- string ESTRUTURA;<-chave estrangeira(Estrutura)<-chave primaria
         -- string RECURSO_GERADO*<-chave primaria(Recursos)
+        CREATE TABLE INDUSTRIA(
+            estrutura VARCHAR(50),
+            recurso_gerado VARCHAR(50),
+            CONSTRAINT PK_INDUSTRIA PRIMARY KEY(estrutura, recurso_gerado),
+            CONSTRAINT FK_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome),
+            CONSTRAINT FK_RECURSO_GERADO FOREIGN KEY(recurso_gerado) REFERENCES RECURSOS(nome)
+        );
 
     -- move_povo
         -- string IMPERIO;<-chave estrangeira(Colonia)<-chave primaria
@@ -243,17 +410,44 @@
         -- int TURNO;<-chave estrangeira(Colonia)<-chave primaria
         -- int qtd*;
         -- int qtd_naves*;
-	
+        CREATE TABLE MOVE_POVO(
+            imperio VARCHAR(50),
+            planeta_destino VARCHAR(50),
+            turno_inicial NUMBER(4) DEFAULT 0,
+            planeta_origem VARCHAR(50),
+            especie VARCHAR(50),
+            tipo VARCHAR(9),
+            turno NUMBER(4) DEFAULT 0,
+            qtd NUMBER(12) DEFAULT 0,
+            qtd_naves NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_MOVE_POVO PRIMARY KEY(imperio, planeta_destino, turno_inicial, planeta_origem, especie, tipo, turno),
+            CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_destino, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
+            CONSTRAINT FK_POVO FOREIGN KEY(planeta_origem, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
+            CONSTRAINT CK_TURNO_INICIAL CHECK(turno_inicial >= 0),
+            CONSTRAINT CK_TURNO CHECK(turno >= turno_inicial),
+            CONSTRAINT CK_QTD CHECK(qtd >= 0),
+            CONSTRAINT CK_QTD_NAVES CHECK(qtd_naves >= 0)
+        );
 
     -- povo_morto_batalha
-        -- int ID_BATALHA;<-chave estrangeira(estoque_gasto_batalha)<-chave primaria
+        -- int ID_BATALHA;<-chave estrangeira(batalha)<-chave primaria
         -- string PLANETA;<-chave estrangeira(Povo)<-chave primaria
         -- string ESPECIE;<-chave estrangeira(Povo)<-chave primaria
         -- string TIPO;<-chave estrangeira(Povo)<-chave primaria
         -- int TURNO;<-chave estrangeira(Povo)<-chave primaria
         -- int qtd*
-
-	
+        CREATE TABLE POVO_MORTO_BATALHA(
+            id_batalha NUMBER(12),
+            planeta VARCHAR(50),
+            especie VARCHAR(50),
+            tipo VARCHAR(9),
+            turno NUMBER(4) DEFAULT 0,
+            qtd NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_POVO_MORTO_BATALHA PRIMARY KEY(id_batalha, planeta, especie, tipo, turno),
+            CONSTRAINT FK_ESTOQUE_GASTO_BATALHA FOREIGN KEY(id_batalha, planeta, especie, tipo, turno) REFERENCES ESTOQUE_GASTO_BATALHA(id_batalha, planeta, especie, tipo, turno),
+            CONSTRAINT FK_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
+            CONSTRAINT CK_QTD CHECK(qtd >= 0)
+        );
 
     -- conhecimento
         -- string PLANETA;<-chave estrangeira(Povo)<-chave primaria
@@ -262,13 +456,36 @@
         -- int TURNO*;<-chave estrangeira(Povo)
         -- string NOME;<-chave estrangeira(Tecnologia)<-chave primaria
         -- int NIVEL;<-chave estrangeira(Tecnologia)<-chave primaria
+        CREATE TABLE CONHECIMENTO(
+            planeta VARCHAR(50),
+            especie VARCHAR(50),
+            tipo VARCHAR(9) NOT NULL,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
+            nome VARCHAR(50),
+            nivel NUMBER(1) DEFAULT 0,
+            CONSTRAINT PK_CONHECIMENTO PRIMARY KEY(planeta, especie, nome, nivel),
+            CONSTRAINT FK_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
+            CONSTRAINT FK_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel),
+            CONSTRAINT CK_TIPO CHECK(tipo IN ('Cientista')),
+            CONSTRAINT CK_TURNO CHECK(turno >= 0)
+        );
 	
-
     -- construcao
-        -- string PLANETA;<-chave estrangeira(Prioridade_producao)<-chave primaria
+        -- string PLANETA;<-chave estrangeira(PLANETA)<-chave primaria
         -- string ESTRUTURA;<-chave estrangeira(Estrutura)<-chave primaria
-        -- int turno;<chave primaria
+        -- int turno; <- chave primaria
         -- int quantidade*;
+        CREATE TABLE CONSTRUCAO(
+            planeta VARCHAR(50),
+            estrutura VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            quantidade NUMBER(7) DEFAULT 0 NOT NULL,
+            CONSTRAINT PK_CONSTRUCAO PRIMARY KEY(planeta, estrutura, turno),
+            CONSTRAINT FK_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
+            CONSTRAINT FK_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome),
+            CONSTRAINT CK_TURNO CHECK(turno >= 0),
+            CONSTRAINT CK_QUANTIDADE CHECK(quantidade >= 0)
+        );
 
     -- atuacao
         -- string PLANETA*;<-chave estrangeira(Construção)
@@ -278,6 +495,21 @@
         -- string ESPECIE;<-chave estrangeira(Civil) <-chave primaria
         -- int TURNO;<-chave estrangeira(Civil) <-chave primaria
         -- int qtd_trabalhadores*;
+        CREATE TABLE ATUACAO(
+            planeta_construcao VARCHAR(50),
+            estrutura VARCHAR(50),
+            turno_construcao NUMBER(4) DEFAULT 0,
+            planeta_civil VARCHAR(50),
+            especie VARCHAR(50),
+            turno_civil NUMBER(4) DEFAULT 0,
+            qtd_trabalhadores NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_ATUACAO PRIMARY KEY(planeta_construcao, estrutura, especie, turno_civil),
+            CONSTRAINT FK_CONSTRUCAO FOREIGN KEY(planeta_construcao, estrutura, turno_construcao) REFERENCES CONSTRUCAO(planeta, estrutura, turno),
+            CONSTRAINT FK_CIVIL FOREIGN KEY(planeta_civil, especie, turno_civil) REFERENCES CIVIL(planeta, especie, turno),
+            CONSTRAINT CK_QTD_TRABALHADORES CHECK(qtd_trabalhadores >= 0),
+            CONSTRAINT CK_PLANETA CHECK(planeta_construcao = planeta_civil),
+            CONSTRAINT CK_TURNO CHECK(turno_construcao = turno_civil)
+        );
 
     -- gera_recurso
         -- string ESTRUTURA; <-chave estrangeira(Atuação)<- chave primaria
@@ -286,9 +518,16 @@
         -- string TURNO;<-chave estrangeira(Atuação)<-chave primaria
         -- string RECURSO;<- chave estrangeira(Recursos)<-chave primaria
         -- int qtd*;
-	
-    -- civil
-        -- string PLANETA; <- chave estrangeira(Povo) <- chave primaria
-        -- string ESPECIO; <- chave estrangeira(Povo) <- chave primaria
-        -- string tipo* <- chave estrangeira(Povo)
-        -- int TURNO;<- chave estragengeira(Povo) <-chave primaria
+        CREATE TABLE GERA_RECURSO(
+            planeta VARCHAR(50),
+            estrutura VARCHAR(50),
+            especie VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            recurso VARCHAR(50),
+            qtd NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_GERA_RECURSO PRIMARY KEY(estrutura, planeta, especie, turno, recurso),
+            CONSTRAINT FK_ATUACAO FOREIGN KEY(planeta, estrutura, especie, turno) REFERENCES ATUACAO(planeta_construcao, estrutura, especie, turno_civil),
+            CONSTRAINT FK_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT CK_QTD CHECK(qtd >= 0)
+        );
+
