@@ -181,7 +181,7 @@
             turno NUMBER(4) DEFAULT 0,
             CONSTRAINT PK_CIVIL PRIMARY KEY(planeta, especie, turno),
             CONSTRAINT FK_CIVIL_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno) ON DELETE CASCADE,
-            CONSTRAINT CK_CIVIL_TIPO CHECK(tipo IN ('Civil')),
+            CONSTRAINT CK_CIVIL_TIPO CHECK(tipo IN ('Civil'))
         );
     
     -- colonia
@@ -285,7 +285,7 @@
             temperatura_kelvin NUMBER(5) DEFAULT 0,
             fertilidade NUMBER(7) DEFAULT 0,
             CONSTRAINT PK_EXPLORACAO PRIMARY KEY(imperio, planeta_explorador, turno_inicial, planeta_explorado, turno),
-            CONSTRAINT FK_EXPLORACAO_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
+            CONSTRAINT FK_EXPLORACAO_COLONIA FOREIGN KEY(imperio, planeta_explorador, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
             CONSTRAINT FK_EXPLORACAO_PLANETA_EXPLORADO FOREIGN KEY(planeta_explorado) REFERENCES PLANETA(nome),
             CONSTRAINT CK_EXPLORACAO_TURNO CHECK(turno >= turno_inicial),
             CONSTRAINT CK_EXPLORACAO_INCERTEZA CHECK(incerteza >= 0 and incerteza <= 1),
@@ -297,6 +297,23 @@
             CONSTRAINT CK_EXPLORACAO_GRAVIDADE CHECK(gravidade >= 0),
             CONSTRAINT CK_EXPLORACAO_TEMPERATURA CHECK(temperatura_kelvin >= 0),
             CONSTRAINT CK_EXPLORACAO_FERTILIDADE CHECK(fertilidade >= 0)
+        );
+
+    -- estoque
+        -- PLANETA; <- chave estrangeira (PLANETA) <- chave primaria
+        -- RECURSO;  <- chave estrangeira (RECURSO) <- chave primaria
+        -- turno; <- chave primaria
+        -- quantidade*;
+        CREATE TABLE ESTOQUE(
+            planeta VARCHAR(50),
+            recurso VARCHAR(50),
+            turno NUMBER(4) DEFAULT 0,
+            quantidade NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_ESTOQUE PRIMARY KEY(planeta, recurso, turno),
+            CONSTRAINT FK_ESTOQUE_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
+            CONSTRAINT FK_ESTOQUE_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT CK_ESTOQUE_TURNO CHECK(turno >= 0),
+            CONSTRAINT CK_ESTOQUE_QUANTIDADE CHECK(quantidade >= 0)
         );
 
     -- Move_recurso
@@ -354,23 +371,6 @@
             CONSTRAINT FK_PRIORIDADE_PRODUCAO_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
             CONSTRAINT CK_PRIORIDADE_PRODUCAO_TURNO CHECK(turno >= 0),
             CONSTRAINT CK_PRIORIDADE_PRODUCAO_ORDEM CHECK(ordem >= 0)
-        );
-
-    -- estoque
-        -- PLANETA; <- chave estrangeira (PLANETA) <- chave primaria
-        -- RECURSO;  <- chave estrangeira (RECURSO) <- chave primaria
-        -- turno; <- chave primaria
-        -- quantidade*;
-        CREATE TABLE ESTOQUE(
-            planeta VARCHAR(50),
-            recurso VARCHAR(50),
-            turno NUMBER(4) DEFAULT 0,
-            quantidade NUMBER(12) DEFAULT 0,
-            CONSTRAINT PK_ESTOQUE PRIMARY KEY(planeta, recurso, turno),
-            CONSTRAINT FK_ESTOQUE_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
-            CONSTRAINT FK_ESTOQUE_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
-            CONSTRAINT CK_ESTOQUE_TURNO CHECK(turno >= 0),
-            CONSTRAINT CK_ESTOQUE_QUANTIDADE CHECK(quantidade >= 0)
         );
 
     -- recurso_precisa_tecnologia
@@ -462,7 +462,7 @@
             CONSTRAINT PK_CONHECIMENTO PRIMARY KEY(planeta, especie, nome, nivel),
             CONSTRAINT FK_CONHECIMENTO_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
             CONSTRAINT FK_CONHECIMENTO_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel),
-            CONSTRAINT CK_CONHECIMENTO_TIPO CHECK(tipo IN ('Cientista')),
+            CONSTRAINT CK_CONHECIMENTO_TIPO CHECK(tipo IN ('Cientista'))
         );
 	
     -- construcao
