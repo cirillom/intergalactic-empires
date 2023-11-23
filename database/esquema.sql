@@ -213,7 +213,7 @@
         -- float poderio_atacante;*
         -- float poderio_defensor;*
         CREATE TABLE BATALHA(
-            id NUMBER(12), --! auto gerado
+            id NUMBER GENERATED AS IDENTITY,
             imperio VARCHAR(50),
             planeta_atacante VARCHAR(50),
             turno_inicial NUMBER(4) DEFAULT 0,
@@ -227,7 +227,7 @@
             CONSTRAINT FK_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
             CONSTRAINT FK_PLANETA_DEFENSOR FOREIGN KEY(planeta_defensor) REFERENCES PLANETA(nome),
             CONSTRAINT FK_PLANETA_VENCEDOR FOREIGN KEY(planeta_vencedor) REFERENCES PLANETA(nome),
-            CONSTRAINT CK_VENCEDOR CHECK(planeta_vencedor IN (planeta_atacante, planeta_defensor)), --!does this account for null?
+            CONSTRAINT CK_VENCEDOR CHECK(planeta_vencedor IS NULL OR planeta_vencedor IN (planeta_atacante, planeta_defensor)),
             CONSTRAINT CK_TURNO_BATALHA CHECK(turno_batalha >= turno_inicial),
             CONSTRAINT CK_VIOLENCIA CHECK(violencia >= 0 and violencia <= 1),
             CONSTRAINT CK_PODERIO_ATACANTE CHECK(poderio_atacante >= 0),
