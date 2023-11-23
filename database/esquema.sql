@@ -180,7 +180,7 @@
             tipo VARCHAR(9) NOT NULL,
             turno NUMBER(4) DEFAULT 0,
             CONSTRAINT PK_CIVIL PRIMARY KEY(planeta, especie, turno),
-            CONSTRAINT FK_CIVIL_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
+            CONSTRAINT FK_CIVIL_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno) ON DELETE CASCADE,
             CONSTRAINT CK_CIVIL_TIPO CHECK(tipo IN ('Civil')),
         );
     
@@ -334,8 +334,8 @@
             recurso VARCHAR(50),
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_RECURSO_PARA_ESTRUTURA PRIMARY KEY(estrutura, recurso),
-            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome),
-            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
+            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE,
             CONSTRAINT CK_RECURSO_PARA_ESTRUTURA_QTD CHECK(qtd >= 0)
         );
 
@@ -382,8 +382,8 @@
             nivel NUMBER(1) DEFAULT 0,
             recurso VARCHAR(50),
             CONSTRAINT PK_RECURSO_PRECISA_TECNOLOGIA PRIMARY KEY(nome, nivel, recurso),
-            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel),
-            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome)
+            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel) ON DELETE CASCADE,
+            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE
         );
 	
     -- industria
@@ -393,8 +393,8 @@
             estrutura VARCHAR(50),
             recurso_gerado VARCHAR(50),
             CONSTRAINT PK_INDUSTRIA PRIMARY KEY(estrutura, recurso_gerado),
-            CONSTRAINT FK_INDUSTRIA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome),
-            CONSTRAINT FK_INDUSTRIA_RECURSO_GERADO FOREIGN KEY(recurso_gerado) REFERENCES RECURSOS(nome)
+            CONSTRAINT FK_INDUSTRIA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
+            CONSTRAINT FK_INDUSTRIA_RECURSO_GERADO FOREIGN KEY(recurso_gerado) REFERENCES RECURSOS(nome) ON DELETE CASCADE
         );
 
     -- move_povo
@@ -521,8 +521,8 @@
             recurso VARCHAR(50),
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_GERA_RECURSO PRIMARY KEY(estrutura, planeta, especie, turno, recurso),
-            CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(planeta, estrutura, especie, turno) REFERENCES ATUACAO(planeta_construcao, estrutura, especie, turno_civil),
-            CONSTRAINT FK_GERA_RECURSO_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome),
+            CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(planeta, estrutura, especie, turno) REFERENCES ATUACAO(planeta_construcao, estrutura, especie, turno_civil) ON DELETE CASCADE,
+            CONSTRAINT FK_GERA_RECURSO_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE,
             CONSTRAINT CK_GERA_RECURSO_QTD CHECK(qtd >= 0)
         );
 
