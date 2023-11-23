@@ -34,19 +34,19 @@
             temperatura_kelvin NUMBER(5) DEFAULT 0 NOT NULL,
             estruturas_max NUMBER(12) DEFAULT 0 NOT NULL,
             gravidade NUMBER(5, 2) DEFAULT 0 NOT NULL,
-            --!massa NUMBER(12) DEFAULT 0 NOT NULL,
+            massa NUMBER(12) DEFAULT 0 NOT NULL, --! update this into MR
             qtd_agua NUMBER(3,3) DEFAULT 0 NOT NULL,
             fertilidade NUMBER(7) DEFAULT 0 NOT NULL,
             poderio_militar NUMBER(12) DEFAULT 0 NOT NULL,
-            CONSTRAINT PK_PLANETA PRIMARY KEY(nome)
-            CONSTRAINT SK_COORDENADAS UNIQUE(coordenadas)
-            CONSTRAINT CK_TEMPERATURA CHECK(temperatura_kelvin >= 0)
-            CONSTRAINT CK_ATMOSFERA CHECK(atmosfera >= 0)
-            CONSTRAINT CK_POPULACAO_MAX CHECK(populacao_max >= 0)
-            CONSTRAINT CK_ESTRUTURAS_MAX CHECK(estruturas_max >= 0)
-            CONSTRAINT CK_GRAVIDADE CHECK(gravidade >= 0)
-            CONSTRAINT CK_QTD_AGUA CHECK(qtd_agua >= 0)
-            CONSTRAINT CK_FERTILIDADE CHECK(fertilidade >= 0)
+            CONSTRAINT PK_PLANETA PRIMARY KEY(nome),
+            CONSTRAINT SK_COORDENADAS UNIQUE(coordenadas),
+            CONSTRAINT CK_TEMPERATURA CHECK(temperatura_kelvin >= 0),
+            CONSTRAINT CK_ATMOSFERA CHECK(atmosfera >= 0),
+            CONSTRAINT CK_POPULACAO_MAX CHECK(populacao_max >= 0),
+            CONSTRAINT CK_ESTRUTURAS_MAX CHECK(estruturas_max >= 0),
+            CONSTRAINT CK_GRAVIDADE CHECK(gravidade >= 0),
+            CONSTRAINT CK_QTD_AGUA CHECK(qtd_agua >= 0),
+            CONSTRAINT CK_FERTILIDADE CHECK(fertilidade >= 0),
             CONSTRAINT CK_PODERIO_MILITAR CHECK(poderio_militar >= 0)
         );
         
@@ -79,18 +79,18 @@
             temperatura_min NUMBER(5) DEFAULT 0 NOT NULL,
             temperatura_max NUMBER(5) DEFAULT 0 NOT NULL,
             tamanho NUMBER(5) DEFAULT 0 NOT NULL,
-            CONSTRAINT PK_ESPECIE PRIMARY KEY(nome)
-            CONSTRAINT CK_CONFORMIDADE CHECK(conformidade >= 0 and conformidade <= 1)
-            CONSTRAINT CK_TRABALHO CHECK(trabalho >= 0 and trabalho <= 1)
-            CONSTRAINT CK_AGRESSIVIDADE CHECK(agressividade >= 0 and agressividade <= 1)
-            CONSTRAINT CK_GRAVIDADE_MIN CHECK(gravidade_min >= 0)
-            CONSTRAINT CK_GRAVIDADE_MAX CHECK(gravidade_max >= gravidade_min)
-            CONSTRAINT CK_AGUA_MIN CHECK(agua_min >= 0)
-            CONSTRAINT CK_AGUA_MAX CHECK(agua_max >= agua_min)
-            CONSTRAINT CK_ATMOSFERA_MIN CHECK(atmosfera_min >= 0)
-            CONSTRAINT CK_ATMOSFERA_MAX CHECK(atmosfera_max >= atmosfera_min)
-            CONSTRAINT CK_TEMPERATURA_MIN CHECK(temperatura_min >= 0)
-            CONSTRAINT CK_TEMPERATURA_MAX CHECK(temperatura_max >= temperatura_min)
+            CONSTRAINT PK_ESPECIE PRIMARY KEY(nome),
+            CONSTRAINT CK_CONFORMIDADE CHECK(conformidade >= 0 and conformidade <= 1),
+            CONSTRAINT CK_TRABALHO CHECK(trabalho >= 0 and trabalho <= 1),
+            CONSTRAINT CK_AGRESSIVIDADE CHECK(agressividade >= 0 and agressividade <= 1),
+            CONSTRAINT CK_GRAVIDADE_MIN CHECK(gravidade_min >= 0),
+            CONSTRAINT CK_GRAVIDADE_MAX CHECK(gravidade_max >= gravidade_min),
+            CONSTRAINT CK_AGUA_MIN CHECK(agua_min >= 0),
+            CONSTRAINT CK_AGUA_MAX CHECK(agua_max >= agua_min),
+            CONSTRAINT CK_ATMOSFERA_MIN CHECK(atmosfera_min >= 0),
+            CONSTRAINT CK_ATMOSFERA_MAX CHECK(atmosfera_max >= atmosfera_min),
+            CONSTRAINT CK_TEMPERATURA_MIN CHECK(temperatura_min >= 0),
+            CONSTRAINT CK_TEMPERATURA_MAX CHECK(temperatura_max >= temperatura_min),
             CONSTRAINT CK_TAMANHO CHECK(tamanho >= 0)
         );
 
