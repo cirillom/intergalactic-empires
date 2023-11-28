@@ -47,6 +47,11 @@
 
 	- string ESTRUTURA;<-chave estrangeira(Estrutura)<-chave primaria
 
+- industria
+	- string ESTRUTURA;<-chave estrangeira(Estrutura)<-chave primaria
+	
+	- string RECURSO_GERADO*<-chave estrangeira(Recursos)
+
 # Chave estrangeira secundária
 **Entidades com chave estrangeira para entidades com chave estrangeira**
 
@@ -78,11 +83,6 @@
 	- string PLANETA_ORIGEM <- chave estrangeira (Estoque) <- chave primaria
 	- string RECURSO <- chave estrangeira (Estoque) <- chave primaria
 	- int TURNO <- chave estrangeira (Estoque) <- chave primaria
-
-- industria
-	- string ESTRUTURA;<-chave estrangeira(Estrutura)<-chave primaria
-	
-	- string RECURSO_GERADO*<-chave estrangeira(Recursos)
 
 - move_povo
 	- string IMPERIO;<-chave estrangeira(Colonia)<-chave primaria
