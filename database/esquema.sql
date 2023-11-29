@@ -63,7 +63,7 @@
 
         CREATE TABLE RECURSOS (
             nome VARCHAR(50),
-            volume NUMBER(5) DEFAULT 0 NOT NULL,
+            volume NUMBER(6) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_RECURSOS PRIMARY KEY(nome)
         );
 
@@ -99,6 +99,33 @@
 
 
 --entidades com chaves estrangeiras
+        CREATE TABLE INDUSTRIA(
+            estrutura VARCHAR(50),
+            recurso_gerado VARCHAR(50),
+            CONSTRAINT PK_INDUSTRIA PRIMARY KEY(estrutura, recurso_gerado),
+            CONSTRAINT FK_INDUSTRIA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
+            CONSTRAINT FK_INDUSTRIA_RECURSO_GERADO FOREIGN KEY(recurso_gerado) REFERENCES RECURSOS(nome) ON DELETE CASCADE
+        );
+
+        CREATE TABLE RECURSO_PARA_ESTRUTURA(
+            estrutura VARCHAR(50),
+            recurso VARCHAR(50),
+            qtd NUMBER(12) DEFAULT 0,
+            CONSTRAINT PK_RECURSO_PARA_ESTRUTURA PRIMARY KEY(estrutura, recurso),
+            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
+            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE,
+            CONSTRAINT CK_RECURSO_PARA_ESTRUTURA_QTD CHECK(qtd >= 0)
+        );
+        
+        CREATE TABLE RECURSO_PRECISA_TECNOLOGIA(
+            nome VARCHAR(50),
+            nivel NUMBER(1) DEFAULT 0,
+            recurso VARCHAR(50),
+            CONSTRAINT PK_RECURSO_PRECISA_TECNOLOGIA PRIMARY KEY(nome, nivel, recurso),
+            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel) ON DELETE CASCADE,
+            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE
+        );
+        
         CREATE TABLE POVO(
             planeta VARCHAR(50),
             especie VARCHAR(50),
@@ -125,16 +152,6 @@
             CONSTRAINT CK_COLONIA_TURNO_FINAL CHECK(turno_final >= turno_inicial)
         );
         
-        CREATE TABLE RECURSO_PARA_ESTRUTURA(
-            estrutura VARCHAR(50),
-            recurso VARCHAR(50),
-            qtd NUMBER(12) DEFAULT 0,
-            CONSTRAINT PK_RECURSO_PARA_ESTRUTURA PRIMARY KEY(estrutura, recurso),
-            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
-            CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE,
-            CONSTRAINT CK_RECURSO_PARA_ESTRUTURA_QTD CHECK(qtd >= 0)
-        );
-
         CREATE TABLE PRIORIDADE_PRODUCAO(
             planeta VARCHAR(50),
             recurso VARCHAR(50),
@@ -159,15 +176,6 @@
             CONSTRAINT CK_ESTOQUE_QUANTIDADE CHECK(quantidade >= 0)
         );
         
-        CREATE TABLE RECURSO_PRECISA_TECNOLOGIA(
-            nome VARCHAR(50),
-            nivel NUMBER(1) DEFAULT 0,
-            recurso VARCHAR(50),
-            CONSTRAINT PK_RECURSO_PRECISA_TECNOLOGIA PRIMARY KEY(nome, nivel, recurso),
-            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel) ON DELETE CASCADE,
-            CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE
-        );
-        
         CREATE TABLE CONSTRUCAO(
             planeta VARCHAR(50),
             estrutura VARCHAR(50),
@@ -178,14 +186,6 @@
             CONSTRAINT FK_CONSTRUCAO_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome),
             CONSTRAINT CK_CONSTRUCAO_TURNO CHECK(turno >= 0),
             CONSTRAINT CK_CONSTRUCAO_QUANTIDADE CHECK(quantidade >= 0)
-        );
-
-        CREATE TABLE INDUSTRIA(
-            estrutura VARCHAR(50),
-            recurso_gerado VARCHAR(50),
-            CONSTRAINT PK_INDUSTRIA PRIMARY KEY(estrutura, recurso_gerado),
-            CONSTRAINT FK_INDUSTRIA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
-            CONSTRAINT FK_INDUSTRIA_RECURSO_GERADO FOREIGN KEY(recurso_gerado) REFERENCES RECURSOS(nome) ON DELETE CASCADE
         );
 
 
