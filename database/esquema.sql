@@ -212,6 +212,7 @@
             poderio_atacante NUMBER(12) DEFAULT 0 NOT NULL,
             poderio_defensor NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_BATALHA PRIMARY KEY(id),
+            CONSTRAINT UQ_BATALHA UNIQUE(imperio, planeta_atacante, turno_inicial, planeta_defensor, turno_batalha),
             CONSTRAINT FK_BATALHA_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
             CONSTRAINT FK_BATALHA_PLANETA_DEFENSOR FOREIGN KEY(planeta_defensor) REFERENCES PLANETA(nome),
             CONSTRAINT FK_BATALHA_PLANETA_VENCEDOR FOREIGN KEY(planeta_vencedor) REFERENCES PLANETA(nome),
@@ -314,6 +315,7 @@
         );
 
         CREATE TABLE ATUACAO(
+            id NUMBER GENERATED AS IDENTITY,
             planeta_construcao VARCHAR(50),
             estrutura VARCHAR(50),
             turno_construcao NUMBER(4) DEFAULT 0,
@@ -321,7 +323,8 @@
             especie VARCHAR(50),
             turno_civil NUMBER(4) DEFAULT 0,
             qtd_trabalhadores NUMBER(12) DEFAULT 0,
-            CONSTRAINT PK_ATUACAO PRIMARY KEY(planeta_construcao, estrutura, especie, turno_civil),
+            CONSTRAINT PK_ATUACAO PRIMARY KEY(id),
+            CONSTRAINT UQ_ATUACAO UNIQUE(planeta_construcao, estrutura, especie, turno_civil),
             CONSTRAINT FK_ATUACAO_CONSTRUCAO FOREIGN KEY(planeta_construcao, estrutura, turno_construcao) REFERENCES CONSTRUCAO(planeta, estrutura, turno),
             CONSTRAINT FK_ATUACAO_CIVIL FOREIGN KEY(planeta_civil, especie, turno_civil) REFERENCES CIVIL(planeta, especie, turno),
             CONSTRAINT CK_ATUACAO_QTD_TRABALHADORES CHECK(qtd_trabalhadores >= 0),
@@ -330,14 +333,11 @@
         );
 
         CREATE TABLE GERA_RECURSO(
-            planeta VARCHAR(50),
-            estrutura VARCHAR(50),
-            especie VARCHAR(50),
-            turno NUMBER(4) DEFAULT 0,
+            id_atuacao NUMBER,
             recurso VARCHAR(50),
             qtd NUMBER(12) DEFAULT 0,
-            CONSTRAINT PK_GERA_RECURSO PRIMARY KEY(estrutura, planeta, especie, turno, recurso),
-            CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(planeta, estrutura, especie, turno) REFERENCES ATUACAO(planeta_construcao, estrutura, especie, turno_civil) ON DELETE CASCADE,
+            CONSTRAINT PK_GERA_RECURSO PRIMARY KEY(id_atuacao, recurso),
+            CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(id_atuacao) REFERENCES ATUACAO(id_atuacao) ON DELETE CASCADE,
             CONSTRAINT FK_GERA_RECURSO_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE,
             CONSTRAINT CK_GERA_RECURSO_QTD CHECK(qtd >= 0)
         );
