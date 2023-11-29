@@ -11,12 +11,12 @@
         CREATE TABLE PLANETA (
             nome VARCHAR(50),
             coordenadas VARCHAR(50) NOT NULL,
-            atmosfera NUMBER(3,3) DEFAULT 0 NOT NULL,
+            atmosfera NUMBER(4,1) DEFAULT 0 NOT NULL,
             populacao_max NUMBER(12) DEFAULT 0 NOT NULL,
             temperatura_kelvin NUMBER(5) DEFAULT 0 NOT NULL,
             estruturas_max NUMBER(12) DEFAULT 0 NOT NULL,
             gravidade NUMBER(5, 2) DEFAULT 0 NOT NULL,
-            massa NUMBER(12) DEFAULT 0 NOT NULL,
+            massa NUMBER(27) DEFAULT 0 NOT NULL,
             qtd_agua NUMBER(3,3) DEFAULT 0 NOT NULL,
             fertilidade NUMBER(7) DEFAULT 0 NOT NULL,
             poderio_militar NUMBER(12) DEFAULT 0 NOT NULL,
@@ -34,15 +34,15 @@
 
         CREATE TABLE ESPECIE(
             nome VARCHAR(50),
-            conformidade NUMBER(3,3) DEFAULT 0 NOT NULL,
-            trabalho NUMBER(3,3) DEFAULT 0 NOT NULL,
-            agressividade NUMBER(3,3) DEFAULT 0 NOT NULL,
+            conformidade NUMBER(4,3) DEFAULT 0 NOT NULL,
+            trabalho NUMBER(4,3) DEFAULT 0 NOT NULL,
+            agressividade NUMBER(4,3) DEFAULT 0 NOT NULL,
             gravidade_min NUMBER(5,2) DEFAULT 0 NOT NULL,
             gravidade_max NUMBER(5,2) DEFAULT 0 NOT NULL,
-            agua_min NUMBER(3,3) DEFAULT 0 NOT NULL,
-            agua_max NUMBER(3,3) DEFAULT 0 NOT NULL,
-            atmosfera_min NUMBER(3,3) DEFAULT 0 NOT NULL,
-            atmosfera_max NUMBER(3,3) DEFAULT 0 NOT NULL,
+            agua_min NUMBER(4,3) DEFAULT 0 NOT NULL,
+            agua_max NUMBER(4,3) DEFAULT 0 NOT NULL,
+            atmosfera_min NUMBER(4,3) DEFAULT 0 NOT NULL,
+            atmosfera_max NUMBER(4,3) DEFAULT 0 NOT NULL,
             temperatura_min NUMBER(5) DEFAULT 0 NOT NULL,
             temperatura_max NUMBER(5) DEFAULT 0 NOT NULL,
             tamanho NUMBER(5) DEFAULT 0 NOT NULL,
@@ -355,29 +355,3 @@
             CONSTRAINT CK_ESTOQUE_GASTO_BATALHA_QTD CHECK(qtd >= 0)
         );
         
-        
-select 'drop table '||table_name||' cascade constraints;' from user_tables;
-    drop table ATUACAO cascade constraints;
-    drop table BATALHA cascade constraints;
-    drop table CIVIL cascade constraints;
-    drop table COLONIA cascade constraints;
-    drop table CONHECIMENTO cascade constraints;
-    drop table CONSTRUCAO cascade constraints;
-    drop table ESPECIE cascade constraints;
-    drop table ESTOQUE cascade constraints;
-    drop table ESTOQUE_GASTO_BATALHA cascade constraints;
-    drop table ESTRUTURA cascade constraints;
-    drop table EXPLORACAO cascade constraints;
-    drop table GERA_RECURSO cascade constraints;
-    drop table IMPERIO cascade constraints;
-    drop table INDUSTRIA cascade constraints;
-    drop table MOVE_POVO cascade constraints;
-    drop table MOVE_RECURSO cascade constraints;
-    drop table PLANETA cascade constraints;
-    drop table POVO cascade constraints;
-    drop table POVO_MORTO_BATALHA cascade constraints;
-    drop table PRIORIDADE_PRODUCAO cascade constraints;
-    drop table RECURSOS cascade constraints;
-    drop table RECURSO_PARA_ESTRUTURA cascade constraints;
-    drop table RECURSO_PRECISA_TECNOLOGIA cascade constraints;
-    drop table TECNOLOGIA cascade constraints;
