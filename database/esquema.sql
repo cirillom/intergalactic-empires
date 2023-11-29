@@ -76,7 +76,7 @@
             capacidade_de_transporte NUMBER(12) DEFAULT 0,
             alcance NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_TECNOLOGIA PRIMARY KEY(nome, nivel),
-            CONSTRAINT CK_NOME CHECK(nome IN ('Transporte', 'Armamento', 'Manufatura')),
+            CONSTRAINT CK_NOME CHECK(nome IN ('TRANSPORTE', 'ARMAMENTO', 'MANUFATURA')),
             CONSTRAINT CK_NIVEL CHECK(nivel >= 0),
             CONSTRAINT CK_COMPLEXIDADE CHECK(complexidade >= 0 and complexidade <= 1),
             CONSTRAINT CK_EFICIENCIA_PRODUTIVA CHECK(eficiencia_produtiva >= 0 and eficiencia_produtiva <= 1),
@@ -91,7 +91,7 @@
             eficiencia NUMBER(3,3) DEFAULT 0,
             lotacao_maxima NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_ESTRUTURA PRIMARY KEY(nome),
-            CONSTRAINT CK_ESTRUTURA_TIPO CHECK(tipo IN ('Industria', 'Base Militar', 'Instituicao de Ensino')),
+            CONSTRAINT CK_ESTRUTURA_TIPO CHECK(tipo IN ('INDUSTRIA', 'BASE MILITAR', 'INSTITUICAO DE ENSINO')),
             CONSTRAINT CK_ESTRUTURA_EFICIENCIA CHECK(eficiencia >= 0 and eficiencia <= 1),
             CONSTRAINT CK_ESTRUTURA_LOTACAO_MAXIMA CHECK(lotacao_maxima >= 0)
         );
@@ -134,7 +134,7 @@
             CONSTRAINT PK_POVO PRIMARY KEY(planeta, especie, tipo, turno),
             CONSTRAINT FK_POVO_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
             CONSTRAINT FK_POVO_ESPECIE FOREIGN KEY(especie) REFERENCES ESPECIE(nome),
-            CONSTRAINT CK_POVO_TIPO CHECK(tipo IN ('Civil', 'Militar', 'Cientista')),
+            CONSTRAINT CK_POVO_TIPO CHECK(tipo IN ('CIVIL', 'MILITAR', 'CIENTISTA')),
             CONSTRAINT CK_POVO_TURNO CHECK(turno >= 0),
             CONSTRAINT CK_POVO_QTD CHECK(qtd >= 0)
         );
@@ -197,7 +197,7 @@
             turno NUMBER(4) DEFAULT 0,
             CONSTRAINT PK_CIVIL PRIMARY KEY(planeta, especie, turno),
             CONSTRAINT FK_CIVIL_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno) ON DELETE CASCADE,
-            CONSTRAINT CK_CIVIL_TIPO CHECK(tipo IN ('Civil'))
+            CONSTRAINT CK_CIVIL_TIPO CHECK(tipo IN ('CIVIL'))
         );
 
         CREATE TABLE BATALHA(
@@ -310,7 +310,7 @@
             CONSTRAINT PK_CONHECIMENTO PRIMARY KEY(planeta, especie, nome, nivel),
             CONSTRAINT FK_CONHECIMENTO_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
             CONSTRAINT FK_CONHECIMENTO_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel),
-            CONSTRAINT CK_CONHECIMENTO_TIPO CHECK(tipo IN ('Cientista'))
+            CONSTRAINT CK_CONHECIMENTO_TIPO CHECK(tipo IN ('CIENTISTA'))
         );
 
         CREATE TABLE ATUACAO(
