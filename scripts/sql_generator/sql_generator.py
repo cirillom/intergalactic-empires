@@ -1,4 +1,4 @@
-estoque = open('new_estoque.csv', 'r')
+estoque = open('data.csv', 'r')
 estoque = estoque.readlines()
 estoque = [i.strip().split(',') for i in estoque]
 
