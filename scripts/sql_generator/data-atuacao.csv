@@ -1,0 +1,10 @@
+id,planeta_construcao,estrutura,turno_construcao,planeta_civil,especie,turno_civil,qtd_trabalhadores
+1,Terra,Lenha,5,Terra,Humano,5,450000
+2,Terra,Pedreira,5,Terra,Humano,5,1750000
+3,Terra,Mineradora,5,Terra,Humano,5,100000
+4,Vulcan,Lenha,5,Vulcan,Vulcans,5,60000
+5,Vulcan,Pedreira,5,Vulcan,Vulcans,5,490000
+6,Vulcan,Mineradora,5,Vulcan,Vulcans,5,80000
+7,Viltrum,Lenha,5,Viltruim,Viltrumita,5,900000
+8,Viltrum,Pedreira,5,Viltruim,Viltrumita,5,1750000
+9,Viltrum,Fabrica de chip,5,Viltruim,Viltrumita,5,750000

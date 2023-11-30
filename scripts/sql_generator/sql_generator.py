@@ -1,18 +1,21 @@
-estoque = open('data.csv', 'r')
+estoque = open('data-atuacao.csv', 'r')
 estoque = estoque.readlines()
 estoque = [i.strip().split(',') for i in estoque]
 
-table_name = 'ESTOQUE'
+table_name = 'ATUACAO'
 
 with open(table_name+'.sql', 'w') as f:
     header = estoque.pop(0)
-    header = header[0] + ', ' + header[1] + ', ' + header[2] + ', ' + header[3]
+    #attribute count
+    n = len(header)
+
+    header = ', '.join(header[:n])
     for i in estoque:
-        #if value is string add quotes
-        for j in range(0, 4):
-            if i[j].isdigit() == False:
-                #make upper case
+        # if value is string add quotes
+        for j in range(0, n):
+            if not i[j].isdigit():
+                # make upper case
                 i[j] = i[j].upper()
                 i[j] = '\'' + i[j] + '\''
-        i = i[0] + ', ' + i[1] + ', ' + i[2] + ', ' + i[3]
-        f.write('INSERT INTO '+table_name+'(' + str(header) + ') VALUES (' + str(i) + ');\n')
+        values = ', '.join(i[:n])
+        f.write(f'INSERT INTO {table_name}({header}) VALUES ({values});\n')

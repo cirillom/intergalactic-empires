@@ -1,0 +1,16 @@
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('ARRAKIS', 'FREMEN', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('KRYPTON', 'KRYPTONIANS', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('PANDORA', 'NAVI', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('TATOOINE', 'KLINGONS', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('TERRA', 'HUMANO', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('TRANTOR', 'SKRULLS', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('VILTRUM', 'VILTRUMITA', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('VULCAN', 'VULCANS', 'CIVIL', 0);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('ARRAKIS', 'FREMEN', 'CIVIL', 5);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('KRYPTON', 'KRYPTONIANS', 'CIVIL', 5);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('PANDORA', 'NAVI', 'CIVIL', 5);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('TATOOINE', 'KLINGONS', 'CIVIL', 5);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('TERRA', 'HUMANO', 'CIVIL', 5);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('TRANTOR', 'SKRULLS', 'CIVIL', 5);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('VILTRUM', 'VILTRUMITA', 'CIVIL', 5);
+INSERT INTO CIVIL(Planeta, Especie, Tipo, Turno) VALUES ('VULCAN', 'VULCANS', 'CIVIL', 5);

@@ -1,15 +1,19 @@
--- Quantidade de recursos de um império
+-- Quantidade de recursos de um império em um turno
 -- get all colonias from an empire where turno_inicial is less than the desired turn and turno_final is geq than the desired turn
 -- get estoque at desired turn from each of the planets in colonias
 -- group by resource
-SELECT E.recurso, SUM(E.qtd) AS quantidade
+VARIABLE turno_atual NUMBER;
+EXEC :turno_atual := 3;
+
+SELECT E.recurso, SUM(E.quantidade) AS quantidade
     FROM estoque E 
     WHERE E.planeta IN (
         SELECT C.planeta
             FROM colonia C
-            WHERE C.imperio = 'Mongol' AND C.turno_inicial <= 1 AND (C.turno_final >= 1 OR C.turno_final IS NULL)
-    )
-    GROUP BY E.recurso;
+            WHERE C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL)
+    ) AND E.turno = :turno_atual
+    GROUP BY E.recurso
+    ORDER BY E.recurso;
 
 -- Quantidade de recursos gerados por um império (soma de tudo gerado em todas as atuações)
 -- get all colonias from an empire (including past ones)
@@ -27,5 +31,9 @@ SELECT G.recurso, SUM(G.qtd) AS quantidade
 
 -- Povos mortos nas batalhas de um império
 --planeta, colonia, imperio, povos, batalha, povo_morto_batalha
+
+
 -- Tecnologias que um império tem acesso
+
+
 -- Estruturas que um planeta consegue construir com os recursos que tem (Divisão relacional)
