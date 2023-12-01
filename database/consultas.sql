@@ -11,19 +11,21 @@ SELECT e.recurso, sum(e.quantidade) AS quantidade
     GROUP BY E.recurso
     ORDER BY E.recurso;
 
+EXEC :turno_atual := 5;
 -- Quantidade de recursos gerados por um império (soma de tudo gerado em todas as atuações)
 -- get all colonias from an empire (including past ones)
 -- get all atuacoes from the planets in colonias from turno_inicial to turno_final or current turn if turno_final is null
 -- get all gera_recursos from the atuacoes where estruturas is of type industria (maybe atuacoes should have ID?)
 -- group by resource summing quantity
 -- (another query to check for life generation?)
-SELECT G.recurso, SUM(G.qtd) AS quantidade
-    FROM gera_recurso G
-    WHERE G.id_atuacao IN (
-        
-    )
-    GROUP BY G.recurso;
-
+SELECT G.recurso, SUM(G.qtd)
+    FROM gera_recurso G 
+    JOIN atuacao A ON G.id_atuacao = A.id
+    JOIN estrutura E on E.nome = A.estrutura
+    JOIN colonia C on c.planeta = A.planeta_civil
+        WHERE e.tipo = 'INDUSTRIA' AND C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL) AND A.turno_civil = :turno_atual
+    GROUP BY G.recurso
+    ORDER BY G.recurso;
 
 -- Povos mortos nas batalhas de um império
 --planeta, colonia, imperio, povos, batalha, povo_morto_batalha
