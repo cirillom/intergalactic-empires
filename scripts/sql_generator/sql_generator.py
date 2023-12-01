@@ -1,8 +1,8 @@
-estoque = open('data-atuacao.csv', 'r')
+estoque = open('data-gera_recurso.csv', 'r')
 estoque = estoque.readlines()
 estoque = [i.strip().split(',') for i in estoque]
 
-table_name = 'ATUACAO'
+table_name = 'GERA_RECURSO'
 
 with open(table_name+'.sql', 'w') as f:
     header = estoque.pop(0)
