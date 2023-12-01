@@ -333,11 +333,11 @@
         );
 
         CREATE TABLE GERA_RECURSO(
-            id_atuacao NUMBER,
+            id_atuacao NUMBER(10),
             recurso VARCHAR(50),
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_GERA_RECURSO PRIMARY KEY(id_atuacao, recurso),
-            CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(id_atuacao) REFERENCES ATUACAO(id_atuacao) ON DELETE CASCADE,
+            CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(id_atuacao) REFERENCES ATUACAO(id) ON DELETE CASCADE,
             CONSTRAINT FK_GERA_RECURSO_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE,
             CONSTRAINT CK_GERA_RECURSO_QTD CHECK(qtd >= 0)
         );
