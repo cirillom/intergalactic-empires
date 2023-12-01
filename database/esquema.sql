@@ -1,7 +1,7 @@
 --entidades sem chaves estrangeiras
         CREATE TABLE IMPERIO(
-            nome VARCHAR(50),
-            cor VARCHAR(50) NOT NULL,
+            nome VARCHAR2(50),
+            cor VARCHAR2(50) NOT NULL,
             qtd_planetas_dominados NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_IMPERIO PRIMARY KEY(nome),
             CONSTRAINT SK_COR UNIQUE(cor),
@@ -9,8 +9,8 @@
         );
 
         CREATE TABLE PLANETA (
-            nome VARCHAR(50),
-            coordenadas VARCHAR(50) NOT NULL,
+            nome VARCHAR2(50),
+            coordenadas VARCHAR2(50) NOT NULL,
             atmosfera NUMBER(4,1) DEFAULT 0 NOT NULL,
             populacao_max NUMBER(12) DEFAULT 0 NOT NULL,
             temperatura_kelvin NUMBER(5) DEFAULT 0 NOT NULL,
@@ -33,7 +33,7 @@
         );
 
         CREATE TABLE ESPECIE(
-            nome VARCHAR(50),
+            nome VARCHAR2(50),
             conformidade NUMBER(4,3) DEFAULT 0 NOT NULL,
             trabalho NUMBER(4,3) DEFAULT 0 NOT NULL,
             agressividade NUMBER(4,3) DEFAULT 0 NOT NULL,
@@ -62,13 +62,13 @@
         );
 
         CREATE TABLE RECURSOS (
-            nome VARCHAR(50),
+            nome VARCHAR2(50),
             volume NUMBER(6) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_RECURSOS PRIMARY KEY(nome)
         );
 
         CREATE TABLE TECNOLOGIA(
-            nome VARCHAR(50),
+            nome VARCHAR2(50),
             nivel NUMBER(1) DEFAULT 0 NOT NULL,
             complexidade NUMBER(3,3) DEFAULT 0 NOT NULL,
             eficiencia_produtiva NUMBER(3,3) DEFAULT 0,
@@ -86,8 +86,8 @@
         );
 
         CREATE TABLE ESTRUTURA(
-            nome VARCHAR(50),
-            tipo VARCHAR(50),
+            nome VARCHAR2(50),
+            tipo VARCHAR2(50),
             eficiencia NUMBER(3,3) DEFAULT 0,
             lotacao_maxima NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_ESTRUTURA PRIMARY KEY(nome),
@@ -99,16 +99,16 @@
 
 --entidades com chaves estrangeiras
         CREATE TABLE INDUSTRIA(
-            estrutura VARCHAR(50),
-            recurso_gerado VARCHAR(50),
+            estrutura VARCHAR2(50),
+            recurso_gerado VARCHAR2(50),
             CONSTRAINT PK_INDUSTRIA PRIMARY KEY(estrutura, recurso_gerado),
             CONSTRAINT FK_INDUSTRIA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
             CONSTRAINT FK_INDUSTRIA_RECURSO_GERADO FOREIGN KEY(recurso_gerado) REFERENCES RECURSOS(nome) ON DELETE CASCADE
         );
 
         CREATE TABLE RECURSO_PARA_ESTRUTURA(
-            estrutura VARCHAR(50),
-            recurso VARCHAR(50),
+            estrutura VARCHAR2(50),
+            recurso VARCHAR2(50),
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_RECURSO_PARA_ESTRUTURA PRIMARY KEY(estrutura, recurso),
             CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
@@ -117,18 +117,18 @@
         );
         
         CREATE TABLE RECURSO_PRECISA_TECNOLOGIA(
-            nome VARCHAR(50),
+            nome VARCHAR2(50),
             nivel NUMBER(1) DEFAULT 0,
-            recurso VARCHAR(50),
+            recurso VARCHAR2(50),
             CONSTRAINT PK_RECURSO_PRECISA_TECNOLOGIA PRIMARY KEY(nome, nivel, recurso),
             CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel) ON DELETE CASCADE,
             CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE
         );
         
         CREATE TABLE POVO(
-            planeta VARCHAR(50),
-            especie VARCHAR(50),
-            tipo VARCHAR(9),
+            planeta VARCHAR2(50),
+            especie VARCHAR2(50),
+            tipo VARCHAR2(9),
             turno NUMBER(4) DEFAULT 0,
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_POVO PRIMARY KEY(planeta, especie, tipo, turno),
@@ -140,8 +140,8 @@
         );
 
         CREATE TABLE COLONIA(
-            imperio VARCHAR(50),
-            planeta VARCHAR(50),
+            imperio VARCHAR2(50),
+            planeta VARCHAR2(50),
             turno_inicial NUMBER(4) DEFAULT 0,
             turno_final NUMBER(4),
             CONSTRAINT PK_COLONIA PRIMARY KEY(imperio, planeta, turno_inicial),
@@ -152,8 +152,8 @@
         );
         
         CREATE TABLE PRIORIDADE_PRODUCAO(
-            planeta VARCHAR(50),
-            recurso VARCHAR(50),
+            planeta VARCHAR2(50),
+            recurso VARCHAR2(50),
             turno NUMBER(4) DEFAULT 0,
             ordem NUMBER(4) DEFAULT 0,
             CONSTRAINT PK_PRIORIDADE_PRODUCAO PRIMARY KEY(planeta, recurso, turno, ordem),
@@ -164,8 +164,8 @@
         );
         
         CREATE TABLE ESTOQUE(
-            planeta VARCHAR(50),
-            recurso VARCHAR(50),
+            planeta VARCHAR2(50),
+            recurso VARCHAR2(50),
             turno NUMBER(4) DEFAULT 0,
             quantidade NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_ESTOQUE PRIMARY KEY(planeta, recurso, turno),
@@ -176,8 +176,8 @@
         );
         
         CREATE TABLE CONSTRUCAO(
-            planeta VARCHAR(50),
-            estrutura VARCHAR(50),
+            planeta VARCHAR2(50),
+            estrutura VARCHAR2(50),
             turno NUMBER(4) DEFAULT 0,
             quantidade NUMBER(7) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_CONSTRUCAO PRIMARY KEY(planeta, estrutura, turno),
@@ -191,9 +191,9 @@
 ----------------------------------------------------------------------
 
         CREATE TABLE CIVIL(
-            planeta VARCHAR(50),
-            especie VARCHAR(50),
-            tipo VARCHAR(9) NOT NULL,
+            planeta VARCHAR2(50),
+            especie VARCHAR2(50),
+            tipo VARCHAR2(9) NOT NULL,
             turno NUMBER(4) DEFAULT 0,
             CONSTRAINT PK_CIVIL PRIMARY KEY(planeta, especie, turno),
             CONSTRAINT FK_CIVIL_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno) ON DELETE CASCADE,
@@ -202,15 +202,15 @@
 
         CREATE TABLE BATALHA(
             id NUMBER GENERATED AS IDENTITY,
-            imperio VARCHAR(50),
-            planeta_atacante VARCHAR(50),
+            imperio VARCHAR2(50),
+            planeta_atacante VARCHAR2(50),
             turno_inicial NUMBER(4) DEFAULT 0,
-            planeta_defensor VARCHAR(50),
+            planeta_defensor VARCHAR2(50),
             turno_batalha NUMBER(4) DEFAULT 0 NOT NULL,
-            planeta_vencedor VARCHAR(50),
+            planeta_vencedor VARCHAR2(50),
             poderio_atacante NUMBER(12) DEFAULT 0 NOT NULL,
             poderio_defensor NUMBER(12) DEFAULT 0 NOT NULL,
-            violencia NUMBER(3,3) DEFAULT 0 NOT NULL,
+            violencia NUMBER(4,3) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_BATALHA PRIMARY KEY(id),
             CONSTRAINT UQ_BATALHA UNIQUE(imperio, planeta_atacante, turno_inicial, planeta_defensor, turno_batalha),
             CONSTRAINT FK_BATALHA_COLONIA FOREIGN KEY(imperio, planeta_atacante, turno_inicial) REFERENCES COLONIA(imperio, planeta, turno_inicial),
@@ -218,16 +218,16 @@
             CONSTRAINT FK_BATALHA_PLANETA_VENCEDOR FOREIGN KEY(planeta_vencedor) REFERENCES PLANETA(nome),
             CONSTRAINT CK_BATALHA_VENCEDOR CHECK(planeta_vencedor IS NULL OR planeta_vencedor IN (planeta_atacante, planeta_defensor)),
             CONSTRAINT CK_BATALHA_TURNO_BATALHA CHECK(turno_batalha >= turno_inicial),
-            CONSTRAINT CK_BATALHA_VIOLENCIA CHECK(violencia >= 0 and violencia <= 1),
+            CONSTRAINT CK_BATALHA_VIOLENCIA CHECK(violencia >= 0 and violencia <= 2),
             CONSTRAINT CK_BATALHA_PODERIO_ATACANTE CHECK(poderio_atacante >= 0),
             CONSTRAINT CK_BATALHA_PODERIO_DEFENSOR CHECK(poderio_defensor >= 0)
         );
 
         CREATE TABLE EXPLORACAO(
-            imperio VARCHAR(50),
-            planeta_explorador VARCHAR(50),
+            imperio VARCHAR2(50),
+            planeta_explorador VARCHAR2(50),
             turno_inicial NUMBER(4) DEFAULT 0,
-            planeta_explorado VARCHAR(50),
+            planeta_explorado VARCHAR2(50),
             turno NUMBER(4) DEFAULT 0,
             incerteza NUMBER(3,3) DEFAULT 0 NOT NULL,
             poderio_militar NUMBER(12) DEFAULT 0,
@@ -254,11 +254,11 @@
         );
 
         CREATE TABLE MOVE_RECURSO(
-            imperio VARCHAR(50),
-            planeta_destino VARCHAR(50),
+            imperio VARCHAR2(50),
+            planeta_destino VARCHAR2(50),
             turno_inicial NUMBER(4) DEFAULT 0,
-            planeta_origem VARCHAR(50),
-            recurso VARCHAR(50),
+            planeta_origem VARCHAR2(50),
+            recurso VARCHAR2(50),
             turno NUMBER(4) DEFAULT 0,
             qtd NUMBER(12) DEFAULT 0,
             qtd_naves NUMBER(12) DEFAULT 0,
@@ -271,12 +271,12 @@
         );
 
         CREATE TABLE MOVE_POVO(
-            imperio VARCHAR(50),
-            planeta_destino VARCHAR(50),
+            imperio VARCHAR2(50),
+            planeta_destino VARCHAR2(50),
             turno_inicial NUMBER(4) DEFAULT 0,
-            planeta_origem VARCHAR(50),
-            especie VARCHAR(50),
-            tipo VARCHAR(9),
+            planeta_origem VARCHAR2(50),
+            especie VARCHAR2(50),
+            tipo VARCHAR2(9),
             turno NUMBER(4) DEFAULT 0,
             qtd NUMBER(12) DEFAULT 0,
             qtd_naves NUMBER(12) DEFAULT 0,
@@ -290,9 +290,9 @@
 
         CREATE TABLE POVO_MORTO_BATALHA(
             id_batalha NUMBER(12),
-            planeta VARCHAR(50),
-            especie VARCHAR(50),
-            tipo VARCHAR(9),
+            planeta VARCHAR2(50),
+            especie VARCHAR2(50),
+            tipo VARCHAR2(9),
             turno NUMBER(4) DEFAULT 0,
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_POVO_MORTO_BATALHA PRIMARY KEY(id_batalha, planeta, especie, tipo, turno),
@@ -302,11 +302,11 @@
         );
 
         CREATE TABLE CONHECIMENTO(
-            planeta VARCHAR(50),
-            especie VARCHAR(50),
-            tipo VARCHAR(9) NOT NULL,
+            planeta VARCHAR2(50),
+            especie VARCHAR2(50),
+            tipo VARCHAR2(9) NOT NULL,
             turno NUMBER(4) DEFAULT 0 NOT NULL,
-            nome VARCHAR(50),
+            nome VARCHAR2(50),
             nivel NUMBER(1) DEFAULT 0,
             CONSTRAINT PK_CONHECIMENTO PRIMARY KEY(planeta, especie, nome, nivel),
             CONSTRAINT FK_CONHECIMENTO_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
@@ -316,11 +316,11 @@
 
         CREATE TABLE ATUACAO(
             id NUMBER GENERATED AS IDENTITY,
-            planeta_construcao VARCHAR(50),
-            estrutura VARCHAR(50),
+            planeta_construcao VARCHAR2(50),
+            estrutura VARCHAR2(50),
             turno_construcao NUMBER(4) DEFAULT 0,
-            planeta_civil VARCHAR(50),
-            especie VARCHAR(50),
+            planeta_civil VARCHAR2(50),
+            especie VARCHAR2(50),
             turno_civil NUMBER(4) DEFAULT 0,
             qtd_trabalhadores NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_ATUACAO PRIMARY KEY(id),
@@ -334,7 +334,7 @@
 
         CREATE TABLE GERA_RECURSO(
             id_atuacao NUMBER(10),
-            recurso VARCHAR(50),
+            recurso VARCHAR2(50),
             qtd NUMBER(12) DEFAULT 0,
             CONSTRAINT PK_GERA_RECURSO PRIMARY KEY(id_atuacao, recurso),
             CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(id_atuacao) REFERENCES ATUACAO(id) ON DELETE CASCADE,
@@ -344,8 +344,8 @@
 
         CREATE TABLE ESTOQUE_GASTO_BATALHA(
             id_batalha NUMBER(12),
-            planeta VARCHAR(50),
-            recurso VARCHAR(50),
+            planeta VARCHAR2(50),
+            recurso VARCHAR2(50),
             turno NUMBER(4) DEFAULT 0,
             qtd NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_ESTOQUE_GASTO_BATALHA PRIMARY KEY(id_batalha, planeta, recurso, turno),
