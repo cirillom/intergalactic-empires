@@ -1,0 +1,9 @@
+id_batalha,planeta,especie,tipo,turno ,qtd
+1,Viltrum,Viltrumita,Militar,2,100000000
+1,Terra,Humano,Civil,2,600000000
+1,Terra,Humano,Cientista,2,600000000
+1,Terra,Humano,Militar,2,750000000
+2,Krypton,Kryptonians,Militar,2,500000
+2,Trantor,Skrulls,Civil,2,1580000000
+2,Trantor,Skrulls,Cientista,2,526400000
+2,Trantor,Skrulls,Militar,2,1653600000
