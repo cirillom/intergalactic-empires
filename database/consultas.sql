@@ -5,13 +5,9 @@
 VARIABLE turno_atual NUMBER;
 EXEC :turno_atual := 3;
 
-SELECT E.recurso, SUM(E.quantidade) AS quantidade
-    FROM estoque E 
-    WHERE E.planeta IN (
-        SELECT C.planeta
-            FROM colonia C
-            WHERE C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL)
-    ) AND E.turno = :turno_atual
+SELECT e.recurso, sum(e.quantidade) AS quantidade
+    FROM estoque E join colonia C on E.planeta = C.planeta
+    WHERE C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL) AND E.turno = :turno_atual
     GROUP BY E.recurso
     ORDER BY E.recurso;
 
