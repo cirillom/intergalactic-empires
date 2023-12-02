@@ -1,13 +1,15 @@
 --entidades sem chaves estrangeiras
+        -- Cria a tabela IMPERIO
         CREATE TABLE IMPERIO(
             nome VARCHAR2(50),
             cor VARCHAR2(50) NOT NULL,
             qtd_planetas_dominados NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_IMPERIO PRIMARY KEY(nome),
-            CONSTRAINT SK_COR UNIQUE(cor),
-            CONSTRAINT CK_QTD_PLANETAS_DOMINADOS CHECK(qtd_planetas_dominados >= 0)
+            CONSTRAINT SK_IMPERIO_COR UNIQUE(cor),
+            CONSTRAINT CK_IMPERIO_QTD_PLANETAS_DOMINADOS CHECK(qtd_planetas_dominados >= 0)
         );
 
+        -- Cria a tabela PLANETA
         CREATE TABLE PLANETA (
             nome VARCHAR2(50),
             coordenadas VARCHAR2(50) NOT NULL,
@@ -22,16 +24,17 @@
             poderio_militar NUMBER(12) NOT NULL,
             CONSTRAINT PK_PLANETA PRIMARY KEY(nome),
             CONSTRAINT SK_COORDENADAS UNIQUE(coordenadas),
-            CONSTRAINT CK_TEMPERATURA CHECK(temperatura_kelvin >= 0),
-            CONSTRAINT CK_ATMOSFERA CHECK(atmosfera >= 0),
-            CONSTRAINT CK_POPULACAO_MAX CHECK(populacao_max >= 0),
-            CONSTRAINT CK_ESTRUTURAS_MAX CHECK(estruturas_max >= 0),
-            CONSTRAINT CK_GRAVIDADE CHECK(gravidade >= 0),
-            CONSTRAINT CK_QTD_AGUA CHECK(qtd_agua >= 0),
-            CONSTRAINT CK_FERTILIDADE CHECK(fertilidade >= 0),
-            CONSTRAINT CK_PODERIO_MILITAR CHECK(poderio_militar >= 0)
+            CONSTRAINT CK_PLANETA_TEMPERATURA CHECK(temperatura_kelvin >= 0),
+            CONSTRAINT CK_PLANETA_ATMOSFERA CHECK(atmosfera >= 0),
+            CONSTRAINT CK_PLANETA_POPULACAO_MAX CHECK(populacao_max >= 0),
+            CONSTRAINT CK_PLANETA_ESTRUTURAS_MAX CHECK(estruturas_max >= 0),
+            CONSTRAINT CK_PLANETA_GRAVIDADE CHECK(gravidade >= 0),
+            CONSTRAINT CK_PLANETA_QTD_AGUA CHECK(qtd_agua >= 0),
+            CONSTRAINT CK_PLANETA_FERTILIDADE CHECK(fertilidade >= 0),
+            CONSTRAINT CK_PLANETA_PODERIO_MILITAR CHECK(poderio_militar >= 0)
         );
 
+        -- Cria a tabela ESPECIE
         CREATE TABLE ESPECIE(
             nome VARCHAR2(50),
             conformidade NUMBER(4,3) NOT NULL,
@@ -47,57 +50,63 @@
             temperatura_max NUMBER(5) NOT NULL,
             volume NUMBER(5) NOT NULL,
             CONSTRAINT PK_ESPECIE PRIMARY KEY(nome),
-            CONSTRAINT CK_CONFORMIDADE CHECK(conformidade >= 0 and conformidade <= 1),
-            CONSTRAINT CK_TRABALHO CHECK(trabalho >= 0 and trabalho <= 1),
-            CONSTRAINT CK_AGRESSIVIDADE CHECK(agressividade >= 0 and agressividade <= 1),
-            CONSTRAINT CK_GRAVIDADE_MIN CHECK(gravidade_min >= 0),
-            CONSTRAINT CK_GRAVIDADE_MAX CHECK(gravidade_max >= gravidade_min),
-            CONSTRAINT CK_AGUA_MIN CHECK(agua_min >= 0),
-            CONSTRAINT CK_AGUA_MAX CHECK(agua_max >= agua_min),
-            CONSTRAINT CK_ATMOSFERA_MIN CHECK(atmosfera_min >= 0),
-            CONSTRAINT CK_ATMOSFERA_MAX CHECK(atmosfera_max >= atmosfera_min),
-            CONSTRAINT CK_TEMPERATURA_MIN CHECK(temperatura_min >= 0),
-            CONSTRAINT CK_TEMPERATURA_MAX CHECK(temperatura_max >= temperatura_min),
-            CONSTRAINT CK_VOLUME CHECK(volume >= 0)
+            CONSTRAINT CK_ESPECIE_CONFORMIDADE CHECK(conformidade >= 0 and conformidade <= 1),
+            CONSTRAINT CK_ESPECIE_TRABALHO CHECK(trabalho >= 0 and trabalho <= 1),
+            CONSTRAINT CK_ESPECIE_AGRESSIVIDADE CHECK(agressividade >= 0 and agressividade <= 1),
+            CONSTRAINT CK_ESPECIE_GRAVIDADE_MIN CHECK(gravidade_min >= 0),
+            CONSTRAINT CK_ESPECIE_GRAVIDADE_MAX CHECK(gravidade_max >= gravidade_min),
+            CONSTRAINT CK_ESPECIE_AGUA_MIN CHECK(agua_min >= 0),
+            CONSTRAINT CK_ESPECIE_AGUA_MAX CHECK(agua_max >= agua_min),
+            CONSTRAINT CK_ESPECIE_ATMOSFERA_MIN CHECK(atmosfera_min >= 0),
+            CONSTRAINT CK_ESPECIE_ATMOSFERA_MAX CHECK(atmosfera_max >= atmosfera_min),
+            CONSTRAINT CK_ESPECIE_TEMPERATURA_MIN CHECK(temperatura_min >= 0),
+            CONSTRAINT CK_ESPECIE_TEMPERATURA_MAX CHECK(temperatura_max >= temperatura_min),
+            CONSTRAINT CK_ESPECIE_VOLUME CHECK(volume >= 0)
         );
 
+        -- Cria a tabela RECURSOS
         CREATE TABLE RECURSOS (
             nome VARCHAR2(50),
-            volume NUMBER(6) DEFAULT 0 NOT NULL,
+            volume NUMBER(6) NOT NULL,
             CONSTRAINT PK_RECURSOS PRIMARY KEY(nome)
+            CONSTRAINT CK_RECURSOS_VOLUME CHECK(volume >= 0)
         );
 
+        -- Cria a tabela TECNOLOGIA
         CREATE TABLE TECNOLOGIA(
             nome VARCHAR2(50),
             nivel NUMBER(1) DEFAULT 0 NOT NULL,
-            complexidade NUMBER(3,3) DEFAULT 0 NOT NULL,
-            eficiencia_produtiva NUMBER(3,3) DEFAULT 0,
-            poder_destrutivo NUMBER(12) DEFAULT 0,
-            capacidade_de_transporte NUMBER(12) DEFAULT 0,
-            alcance NUMBER(12) DEFAULT 0,
+            complexidade NUMBER(3,3) NOT NULL,
+            eficiencia_produtiva NUMBER(3,3),
+            poder_destrutivo NUMBER(12),
+            capacidade_de_transporte NUMBER(12),
+            alcance NUMBER(12),
             CONSTRAINT PK_TECNOLOGIA PRIMARY KEY(nome, nivel),
-            CONSTRAINT CK_NOME CHECK(nome IN ('TRANSPORTE', 'ARMAMENTO', 'MANUFATURA')),
-            CONSTRAINT CK_NIVEL CHECK(nivel >= 0),
-            CONSTRAINT CK_COMPLEXIDADE CHECK(complexidade >= 0 and complexidade <= 1),
-            CONSTRAINT CK_EFICIENCIA_PRODUTIVA CHECK(eficiencia_produtiva >= 0 and eficiencia_produtiva <= 1),
-            CONSTRAINT CK_PODER_DESTRUTIVO CHECK(poder_destrutivo >= 0),
-            CONSTRAINT CK_CAPACIDADE_DE_TRANSPORTE CHECK(capacidade_de_transporte >= 0),
-            CONSTRAINT CK_ALCANCE CHECK(alcance >= 0)
+            CONSTRAINT CK_TECNOLOGIA_NOME CHECK(nome IN ('TRANSPORTE', 'ARMAMENTO', 'MANUFATURA')),
+            CONSTRAINT CK_TECNOLOGIA_NIVEL CHECK(nivel >= 0),
+            CONSTRAINT CK_TECNOLOGIA_COMPLEXIDADE CHECK(complexidade >= 0 and complexidade <= 1),
+            CONSTRAINT CK_TECNOLOGIA_EFICIENCIA_PRODUTIVA CHECK(eficiencia_produtiva >= 0 and eficiencia_produtiva <= 1),
+            CONSTRAINT CK_TECNOLOGIA_PODER_DESTRUTIVO CHECK(poder_destrutivo >= 0),
+            CONSTRAINT CK_TECNOLOGIA_CAPACIDADE_DE_TRANSPORTE CHECK(capacidade_de_transporte >= 0),
+            CONSTRAINT CK_TECNOLOGIA_ALCANCE CHECK(alcance >= 0)
         );
 
+        -- Cria a tabela ESTRUTURA
         CREATE TABLE ESTRUTURA(
             nome VARCHAR2(50),
-            tipo VARCHAR2(50),
-            eficiencia NUMBER(3,3) DEFAULT 0,
-            lotacao_maxima NUMBER(12) DEFAULT 0,
+            tipo VARCHAR2(50) NOT NULL,
+            eficiencia NUMBER(3,3) NOT NULL,
+            lotacao_maxima NUMBER(12) NOT NULL,
             CONSTRAINT PK_ESTRUTURA PRIMARY KEY(nome),
-            CONSTRAINT CK_ESTRUTURA_TIPO CHECK(tipo IN ('INDUSTRIA', 'BASE MILITAR', 'INSTITUICAO DE ENSINO')),
+            CONSTRAINT  ESTRUTURA_TIPO CHECK(tipo IN ('INDUSTRIA', 'BASE MILITAR', 'INSTITUICAO DE ENSINO')),
             CONSTRAINT CK_ESTRUTURA_EFICIENCIA CHECK(eficiencia >= 0 and eficiencia <= 1),
             CONSTRAINT CK_ESTRUTURA_LOTACAO_MAXIMA CHECK(lotacao_maxima >= 0)
         );
 
 
 --entidades com chaves estrangeiras
+
+        -- Cria a tabela INDUSTRIA
         CREATE TABLE INDUSTRIA(
             estrutura VARCHAR2(50),
             recurso_gerado VARCHAR2(50),
@@ -106,6 +115,7 @@
             CONSTRAINT FK_INDUSTRIA_RECURSO_GERADO FOREIGN KEY(recurso_gerado) REFERENCES RECURSOS(nome) ON DELETE CASCADE
         );
 
+        -- Cria a tabela RECURSO_PARA_ESTRUTURA
         CREATE TABLE RECURSO_PARA_ESTRUTURA(
             estrutura VARCHAR2(50),
             recurso VARCHAR2(50),
@@ -116,6 +126,7 @@
             CONSTRAINT CK_RECURSO_PARA_ESTRUTURA_QTD CHECK(qtd >= 0)
         );
         
+        -- Cria a tabela RECURSO_PRECISA_TECNOLOGIA
         CREATE TABLE RECURSO_PRECISA_TECNOLOGIA(
             nome VARCHAR2(50),
             nivel NUMBER(1) DEFAULT 0,
@@ -125,6 +136,7 @@
             CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE
         );
         
+        -- Cria a tabela POVO
         CREATE TABLE POVO(
             planeta VARCHAR2(50),
             especie VARCHAR2(50),
@@ -139,6 +151,7 @@
             CONSTRAINT CK_POVO_QTD CHECK(qtd >= 0)
         );
 
+        -- Cria a tabela COLONIA
         CREATE TABLE COLONIA(
             imperio VARCHAR2(50),
             planeta VARCHAR2(50),
@@ -151,6 +164,7 @@
             CONSTRAINT CK_COLONIA_TURNO_FINAL CHECK(turno_final >= turno_inicial)
         );
         
+        -- Cria a tabela PRIORIDADE_PRODUCAO
         CREATE TABLE PRIORIDADE_PRODUCAO(
             planeta VARCHAR2(50),
             recurso VARCHAR2(50),
@@ -163,6 +177,7 @@
             CONSTRAINT CK_PRIORIDADE_PRODUCAO_ORDEM CHECK(ordem >= 0)
         );
         
+        -- Cria a tabela ESTOQUE
         CREATE TABLE ESTOQUE(
             planeta VARCHAR2(50),
             recurso VARCHAR2(50),
@@ -175,6 +190,7 @@
             CONSTRAINT CK_ESTOQUE_QUANTIDADE CHECK(quantidade >= 0)
         );
         
+        -- Cria a tabela CONSTRUCAO
         CREATE TABLE CONSTRUCAO(
             planeta VARCHAR2(50),
             estrutura VARCHAR2(50),
@@ -190,6 +206,7 @@
 
 ----------------------------------------------------------------------
 
+        -- Cria a tabela CIVIL
         CREATE TABLE CIVIL(
             planeta VARCHAR2(50),
             especie VARCHAR2(50),
@@ -200,6 +217,7 @@
             CONSTRAINT CK_CIVIL_TIPO CHECK(tipo IN ('CIVIL'))
         );
 
+        -- Cria a tabela BATALHA
         CREATE TABLE BATALHA(
             id NUMBER GENERATED AS IDENTITY,
             imperio VARCHAR2(50),
@@ -223,6 +241,7 @@
             CONSTRAINT CK_BATALHA_PODERIO_DEFENSOR CHECK(poderio_defensor >= 0)
         );
 
+        -- Cria a tabela EXPLORACAO
         CREATE TABLE EXPLORACAO(
             imperio VARCHAR2(50),
             planeta_explorador VARCHAR2(50),
@@ -253,6 +272,7 @@
             CONSTRAINT CK_EXPLORACAO_FERTILIDADE CHECK(fertilidade >= 0)
         );
 
+        -- Cria a tabela MOVE_RECURSO
         CREATE TABLE MOVE_RECURSO(
             imperio VARCHAR2(50),
             planeta_destino VARCHAR2(50),
@@ -270,6 +290,7 @@
             CONSTRAINT CK_MOVE_RECURSO_QTD_NAVES CHECK(qtd_naves >= 0)
         );
 
+        -- Cria a tabela MOVE_POVO
         CREATE TABLE MOVE_POVO(
             imperio VARCHAR2(50),
             planeta_destino VARCHAR2(50),
@@ -288,6 +309,7 @@
             CONSTRAINT CK_MOVE_POVO_QTD_NAVES CHECK(qtd_naves >= 0)
         );
 
+        -- Cria a tabela POVO_MORTO_BATALHA
         CREATE TABLE POVO_MORTO_BATALHA(
             id_batalha NUMBER(12),
             planeta VARCHAR2(50),
@@ -301,6 +323,7 @@
             CONSTRAINT CK_POVO_MORTO_BATALHA_QTD CHECK(qtd >= 0)
         );
 
+        -- Cria a tabela CONHECIMENTO
         CREATE TABLE CONHECIMENTO(
             planeta VARCHAR2(50),
             especie VARCHAR2(50),
@@ -314,6 +337,7 @@
             CONSTRAINT CK_CONHECIMENTO_TIPO CHECK(tipo IN ('CIENTISTA'))
         );
 
+        -- Cria a tabela ATUACAO
         CREATE TABLE ATUACAO(
             id NUMBER GENERATED AS IDENTITY,
             planeta_construcao VARCHAR2(50),
@@ -332,6 +356,7 @@
             CONSTRAINT CK_ATUACAO_TURNO CHECK(turno_construcao = turno_civil)
         );
 
+        -- Cria a tabela GERA_RECURSO
         CREATE TABLE GERA_RECURSO(
             id_atuacao NUMBER(10),
             recurso VARCHAR2(50),
@@ -342,6 +367,7 @@
             CONSTRAINT CK_GERA_RECURSO_QTD CHECK(qtd >= 0)
         );
 
+        -- Cria a tabela ESTOQUE_GASTO_BATALHA
         CREATE TABLE ESTOQUE_GASTO_BATALHA(
             id_batalha NUMBER(12),
             planeta VARCHAR2(50),
