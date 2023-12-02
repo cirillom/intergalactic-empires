@@ -34,18 +34,18 @@
 
         CREATE TABLE ESPECIE(
             nome VARCHAR2(50),
-            conformidade NUMBER(4,3) DEFAULT 0 NOT NULL,
-            trabalho NUMBER(4,3) DEFAULT 0 NOT NULL,
-            agressividade NUMBER(4,3) DEFAULT 0 NOT NULL,
-            gravidade_min NUMBER(5,2) DEFAULT 0 NOT NULL,
-            gravidade_max NUMBER(5,2) DEFAULT 0 NOT NULL,
-            agua_min NUMBER(4,3) DEFAULT 0 NOT NULL,
-            agua_max NUMBER(4,3) DEFAULT 0 NOT NULL,
-            atmosfera_min NUMBER(4,3) DEFAULT 0 NOT NULL,
-            atmosfera_max NUMBER(4,3) DEFAULT 0 NOT NULL,
-            temperatura_min NUMBER(5) DEFAULT 0 NOT NULL,
-            temperatura_max NUMBER(5) DEFAULT 0 NOT NULL,
-            tamanho NUMBER(5) DEFAULT 0 NOT NULL,
+            conformidade NUMBER(4,3) NOT NULL,
+            trabalho NUMBER(4,3) NOT NULL,
+            agressividade NUMBER(4,3) NOT NULL,
+            gravidade_min NUMBER(5,2) NOT NULL,
+            gravidade_max NUMBER(5,2) NOT NULL,
+            agua_min NUMBER(4,3) NOT NULL,
+            agua_max NUMBER(4,3) NOT NULL,
+            atmosfera_min NUMBER(4,3) NOT NULL,
+            atmosfera_max NUMBER(4,3) NOT NULL,
+            temperatura_min NUMBER(5) NOT NULL,
+            temperatura_max NUMBER(5) NOT NULL,
+            volume NUMBER(5) NOT NULL,
             CONSTRAINT PK_ESPECIE PRIMARY KEY(nome),
             CONSTRAINT CK_CONFORMIDADE CHECK(conformidade >= 0 and conformidade <= 1),
             CONSTRAINT CK_TRABALHO CHECK(trabalho >= 0 and trabalho <= 1),
@@ -58,7 +58,7 @@
             CONSTRAINT CK_ATMOSFERA_MAX CHECK(atmosfera_max >= atmosfera_min),
             CONSTRAINT CK_TEMPERATURA_MIN CHECK(temperatura_min >= 0),
             CONSTRAINT CK_TEMPERATURA_MAX CHECK(temperatura_max >= temperatura_min),
-            CONSTRAINT CK_TAMANHO CHECK(tamanho >= 0)
+            CONSTRAINT CK_VOLUME CHECK(volume >= 0)
         );
 
         CREATE TABLE RECURSOS (
