@@ -250,7 +250,7 @@
             turno NUMBER(4) DEFAULT 0,
             incerteza NUMBER(3,3) NOT NULL,
             poderio_militar NUMBER(12),
-            atmosfera NUMBER(3,3),
+            atmosfera NUMBER(4,1),
             qtd_populacao NUMBER(12),
             qtd_estruturas NUMBER(12),
             qtd_agua NUMBER(3,3),
