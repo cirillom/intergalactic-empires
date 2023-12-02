@@ -21,7 +21,7 @@
             massa NUMBER(27) NOT NULL,
             qtd_agua NUMBER(3,3) NOT NULL,
             fertilidade NUMBER(7) NOT NULL,
-            poderio_militar NUMBER(12) NOT NULL,
+            poderio_militar NUMBER(12),
             CONSTRAINT PK_PLANETA PRIMARY KEY(nome),
             CONSTRAINT SK_COORDENADAS UNIQUE(coordenadas),
             CONSTRAINT CK_PLANETA_TEMPERATURA CHECK(temperatura_kelvin >= 0),
