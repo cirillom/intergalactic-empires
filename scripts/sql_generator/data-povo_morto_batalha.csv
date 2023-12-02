@@ -7,3 +7,7 @@ id_batalha,planeta,especie,tipo,turno ,qtd
 2,Trantor,Skrulls,Civil,2,1580000000
 2,Trantor,Skrulls,Cientista,2,526400000
 2,Trantor,Skrulls,Militar,2,1653600000
+7,Tatooine,Klingons,Militar,6,1002803
+7,Terra,Humano,Militar,6,4000000
+7,Terra,Humano,Civil,6,3000000
+7,Terra,Humano,Cientista,6,200000

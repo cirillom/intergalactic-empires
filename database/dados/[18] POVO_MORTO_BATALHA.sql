@@ -6,3 +6,7 @@ INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) 
 INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) VALUES (2, 'TRANTOR', 'SKRULLS', 'CIVIL', 2, 1580000000);
 INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) VALUES (2, 'TRANTOR', 'SKRULLS', 'CIENTISTA', 2, 526400000);
 INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) VALUES (2, 'TRANTOR', 'SKRULLS', 'MILITAR', 2, 1653600000);
+INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) VALUES (7, 'TATOOINE', 'KLINGONS', 'MILITAR', 6, 1002803);
+INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) VALUES (7, 'TERRA', 'HUMANO', 'MILITAR', 6, 4000000);
+INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) VALUES (7, 'TERRA', 'HUMANO', 'CIVIL', 6, 3000000);
+INSERT INTO POVO_MORTO_BATALHA(id_batalha, planeta, especie, tipo, turno , qtd) VALUES (7, 'TERRA', 'HUMANO', 'CIENTISTA', 6, 200000);
