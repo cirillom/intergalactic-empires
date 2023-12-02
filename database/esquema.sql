@@ -68,7 +68,7 @@
         CREATE TABLE RECURSOS (
             nome VARCHAR2(50),
             volume NUMBER(6) NOT NULL,
-            CONSTRAINT PK_RECURSOS PRIMARY KEY(nome)
+            CONSTRAINT PK_RECURSOS PRIMARY KEY(nome),
             CONSTRAINT CK_RECURSOS_VOLUME CHECK(volume >= 0)
         );
 
