@@ -3,35 +3,71 @@
 -- get estoque at desired turn from each of the planets in colonias
 -- group by resource
 VARIABLE turno_atual NUMBER;
+
 EXEC :turno_atual := 3;
 
-SELECT e.recurso, sum(e.quantidade) AS quantidade
-    FROM estoque E join colonia C on E.planeta = C.planeta
-    WHERE C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL) AND E.turno = :turno_atual
-    GROUP BY E.recurso
-    ORDER BY E.recurso;
+SELECT
+    E.RECURSO,
+    SUM(E.QUANTIDADE) AS QUANTIDADE
+FROM
+    ESTOQUE E
+    JOIN COLONIA C
+    ON E.PLANETA = C.PLANETA
+WHERE
+    C.IMPERIO = 'MONGOL'
+    AND C.TURNO_INICIAL <= :TURNO_ATUAL
+    AND (C.TURNO_FINAL >= :TURNO_ATUAL
+    OR C.TURNO_FINAL IS NULL)
+    AND E.TURNO = :TURNO_ATUAL
+GROUP BY
+    E.RECURSO
+ORDER BY
+    E.RECURSO;
 
 EXEC :turno_atual := 5;
+
 -- Quantidade de recursos gerados por um império (soma de tudo gerado em todas as atuações)
 -- get all colonias from an empire (including past ones)
 -- get all atuacoes from the planets in colonias from turno_inicial to turno_final or current turn if turno_final is null
 -- get all gera_recursos from the atuacoes where estruturas is of type industria (maybe atuacoes should have ID?)
 -- group by resource summing quantity
 -- (another query to check for life generation?)
-SELECT G.recurso, SUM(G.qtd)
-    FROM gera_recurso G 
-    JOIN atuacao A ON G.id_atuacao = A.id
-    JOIN estrutura E on E.nome = A.estrutura
-    JOIN colonia C on c.planeta = A.planeta_civil
-        WHERE e.tipo = 'INDUSTRIA' AND C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL) AND A.turno_civil = :turno_atual
-    GROUP BY G.recurso
-    ORDER BY G.recurso;
+SELECT
+    G.RECURSO,
+    SUM(G.QTD)
+FROM
+    GERA_RECURSO G
+    JOIN ATUACAO A
+    ON G.ID_ATUACAO = A.ID JOIN ESTRUTURA E
+    ON E.NOME = A.ESTRUTURA
+    JOIN COLONIA C
+    ON C.PLANETA = A.PLANETA_CIVIL
+WHERE
+    E.TIPO = 'INDUSTRIA'
+    AND C.IMPERIO = 'MONGOL'
+    AND C.TURNO_INICIAL <= :TURNO_ATUAL
+    AND (C.TURNO_FINAL >= :TURNO_ATUAL
+    OR C.TURNO_FINAL IS NULL)
+    AND A.TURNO_CIVIL = :TURNO_ATUAL
+GROUP BY
+    G.RECURSO
+ORDER BY
+    G.RECURSO;
 
--- Povos mortos nas batalhas de um império
---planeta, colonia, imperio, povos, batalha, povo_morto_batalha
+-- Quantidade de individuos de cada especie morto nas batalhas de um império
+SELECT
+    E.NOME AS ESPECIE,
+    NVL(SUM(PM.QTD), 0) AS MORTOS
+FROM
+    POVO_MORTO_BATALHA PM
+    JOIN BATALHA B
+        ON PM.ID_BATALHA = B.ID AND B.IMPERIO = :IMPERIO 
+    RIGHT JOIN ESPECIE E
+        ON PM.ESPECIE = E.NOME
+    GROUP BY
+        E.NOME;
 
 
--- Tecnologias que um império tem acesso
+-- o planeta A consegue construir a estrutura X com o estoque que ele tem
 
-
--- Estruturas que um planeta consegue construir com os recursos que tem (Divisão relacional)
+-- quantas construções um povo atuou
