@@ -1,8 +1,11 @@
-estoque = open('data-exploracao.csv', 'r')
+import sys
+table_name = sys.argv[1]
+
+estoque = open(f'data-{table_name}.csv', 'r')
 estoque = estoque.readlines()
 estoque = [i.strip().split(',') for i in estoque]
 
-table_name = 'EXPLORACAO'
+table_name = table_name.upper()
 
 with open(table_name+'.sql', 'w') as f:
     header = estoque.pop(0)
