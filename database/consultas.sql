@@ -104,14 +104,18 @@ WHERE
 -- imperio por ordem de poder total (soma do poder de todas as colonias)
 SELECT 
     C.IMPERIO,
+    I.COR,
     NVL(SUM(P.QTD_AGUA * P.ESTRUTURAS_MAX), 0) AS PODER
 FROM
     PLANETA P
     JOIN COLONIA C
         ON P.NOME = C.PLANETA
             AND C.TURNO_INICIAL <= :TURNO AND (C.TURNO_FINAL >= :TURNO OR C.TURNO_FINAL IS NULL)
+    JOIN IMPERIO I
+        ON I.NOME = C.IMPERIO
 GROUP BY
-    C.IMPERIO
+    C.IMPERIO,
+    I.COR
 ORDER BY
     NVL(SUM(P.QTD_AGUA * P.ESTRUTURAS_MAX), 0) DESC;
 
