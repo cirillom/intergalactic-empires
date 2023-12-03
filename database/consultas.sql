@@ -40,6 +40,22 @@ ORDER BY
 -- Navi | 0
 -- [...]
 
+SELECT 
+    E.NOME AS ESPECIE,
+    NVL(SUM(A.QTD_TRABALHADORES), 0) AS CIVIS
+FROM
+    ATUACAO A
+    JOIN COLONIA C
+        ON C.PLANETA = A.PLANETA_CIVIL AND C.TURNO_INICIAL <= A.TURNO_CIVIL AND (C.TURNO_FINAL >= A.TURNO_CIVIL OR C.TURNO_FINAL IS NULL)
+        AND IMPERIO = :IMPERIO
+    RIGHT JOIN ESPECIE E
+        ON E.NOME = A.ESPECIE
+GROUP BY
+    E.NOME
+ORDER BY
+    E.NOME;
+
+
 -- Quantidade de individuos de cada especie morto nas batalhas de um império
 SELECT
     E.NOME AS ESPECIE,
