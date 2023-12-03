@@ -1,41 +1,125 @@
 -- Quantidade de recursos de um império em um turno
--- get all colonias from an empire where turno_inicial is less than the desired turn and turno_final is geq than the desired turn
--- get estoque at desired turn from each of the planets in colonias
--- group by resource
-VARIABLE turno_atual NUMBER;
-EXEC :turno_atual := 3;
+SELECT
+    E.RECURSO,
+    NVL(SUM(E.QUANTIDADE), 0) AS QUANTIDADE
+FROM
+    ESTOQUE E
+    JOIN COLONIA C
+        ON E.PLANETA = C.PLANETA
+    RIGHT JOIN RECURSOS R
+        ON E.RECURSO = R.NOME
+WHERE
+    C.IMPERIO = :IMPERIO AND C.TURNO_INICIAL <= :TURNO_ATUAL AND (C.TURNO_FINAL >= :TURNO_ATUAL OR C.TURNO_FINAL IS NULL)
+    AND E.TURNO = :TURNO_ATUAL
+GROUP BY
+    E.RECURSO
+ORDER BY
+    E.RECURSO;
 
-SELECT e.recurso, sum(e.quantidade) AS quantidade
-    FROM estoque E join colonia C on E.planeta = C.planeta
-    WHERE C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL) AND E.turno = :turno_atual
-    GROUP BY E.recurso
-    ORDER BY E.recurso;
-
-EXEC :turno_atual := 5;
 -- Quantidade de recursos gerados por um império (soma de tudo gerado em todas as atuações)
--- get all colonias from an empire (including past ones)
--- get all atuacoes from the planets in colonias from turno_inicial to turno_final or current turn if turno_final is null
--- get all gera_recursos from the atuacoes where estruturas is of type industria (maybe atuacoes should have ID?)
--- group by resource summing quantity
--- (another query to check for life generation?)
-SELECT G.recurso, SUM(G.qtd)
-    FROM gera_recurso G 
-    JOIN atuacao A ON G.id_atuacao = A.id
-    JOIN estrutura E on E.nome = A.estrutura
-    JOIN colonia C on c.planeta = A.planeta_civil
-        WHERE e.tipo = 'INDUSTRIA' AND C.imperio = 'MONGOL' AND C.turno_inicial <= :turno_atual AND (C.turno_final >= :turno_atual OR C.turno_final IS NULL) AND A.turno_civil = :turno_atual
-    GROUP BY G.recurso
-    ORDER BY G.recurso;
+SELECT
+    R.NOME AS RECURSO,
+    NVL(SUM(G.QTD), 0) AS QUANTIDADE
+FROM
+    GERA_RECURSO G
+    JOIN ATUACAO A
+        ON G.ID_ATUACAO = A.ID
+    JOIN COLONIA C
+        ON C.PLANETA = A.PLANETA_CIVIL AND C.TURNO_INICIAL <= A.TURNO_CIVIL AND (C.TURNO_FINAL >= A.TURNO_CIVIL OR C.TURNO_FINAL IS NULL)
+        AND IMPERIO = :IMPERIO
+    RIGHT JOIN RECURSOS R
+        ON G.RECURSO = R.NOME
+GROUP BY
+    R.NOME
+ORDER BY
+    R.NOME;
 
--- Povos mortos nas batalhas de um império
---planeta, colonia, imperio, povos, batalha, povo_morto_batalha
+-- Quantidade de civis transformados de cada especie por um império
+-- Especie | qtd
+-- Humanos | 25980
+-- Navi | 0
+-- [...]
+
+SELECT 
+    E.NOME AS ESPECIE,
+    NVL(SUM(A.QTD_TRABALHADORES), 0) AS CIVIS
+FROM
+    ATUACAO A
+    JOIN COLONIA C
+        ON C.PLANETA = A.PLANETA_CIVIL AND C.TURNO_INICIAL <= A.TURNO_CIVIL AND (C.TURNO_FINAL >= A.TURNO_CIVIL OR C.TURNO_FINAL IS NULL)
+        AND IMPERIO = :IMPERIO
+    RIGHT JOIN ESPECIE E
+        ON E.NOME = A.ESPECIE
+GROUP BY
+    E.NOME
+ORDER BY
+    E.NOME;
 
 
--- Tecnologias que um império tem acesso
+-- Quantidade de individuos de cada especie morto nas batalhas de um império
+SELECT
+    E.NOME AS ESPECIE,
+    NVL(SUM(PM.QTD), 0) AS MORTOS
+FROM
+    POVO_MORTO_BATALHA PM
+    JOIN BATALHA B
+        ON PM.ID_BATALHA = B.ID AND B.IMPERIO = :IMPERIO 
+    RIGHT JOIN ESPECIE E
+        ON PM.ESPECIE = E.NOME
+    GROUP BY
+        E.NOME;
 
 
--- Estruturas que um planeta consegue construir com os recursos que tem (Divisão relacional)
+-- o planeta A consegue construir a estrutura X com o estoque que ele tem  (-1 é falso e maior igual a 0 verdadeiro)
+SELECT
+    MIN((NVL(E.QUANTIDADE, 0) - R.QTD)) AS PODE_CONSTRUIR
+FROM
+    RECURSO_PARA_ESTRUTURA R
+    RIGHT JOIN ESTOQUE E
+        ON R.RECURSO = E.RECURSO
+WHERE
+    E.PLANETA = :PLANETA AND E.TURNO = :TURNO AND R.ESTRUTURA = :ESTRUTURA;
 
+-- Construções que a população de um planeta não atuou em um turno (divisão relacional)
+SELECT
+    C.ESTRUTURA,
+    C.QUANTIDADE
+FROM
+    CONSTRUCAO C
+WHERE 
+    C.PLANETA = :PLANETA AND C.TURNO = :TURNO AND C.QUANTIDADE > 0
+MINUS
+SELECT
+    C.ESTRUTURA,
+    C.QUANTIDADE
+FROM
+    ATUACAO A 
+    JOIN CONSTRUCAO C
+        ON A.PLANETA_CONSTRUCAO = C.PLANETA AND A.ESTRUTURA = C.ESTRUTURA AND A.TURNO_CONSTRUCAO = C.TURNO
+WHERE 
+    C.PLANETA = :PLANETA AND C.TURNO = :TURNO;
+
+--!CONSULTAS DO JOGO
+
+-- imperio por ordem de poder total (soma do poder de todas as colonias)
+SELECT 
+    C.IMPERIO,
+    I.COR,
+    NVL(SUM(P.QTD_AGUA * P.ESTRUTURAS_MAX), 0) AS PODER
+FROM
+    PLANETA P
+    JOIN COLONIA C
+        ON P.NOME = C.PLANETA
+            AND C.TURNO_INICIAL <= :TURNO AND (C.TURNO_FINAL >= :TURNO OR C.TURNO_FINAL IS NULL)
+    JOIN IMPERIO I
+        ON I.NOME = C.IMPERIO
+GROUP BY
+    C.IMPERIO,
+    I.COR
+ORDER BY
+    NVL(SUM(P.QTD_AGUA * P.ESTRUTURAS_MAX), 0) DESC;
+
+--poder de cada colonia de um imperio em um turno
 SELECT 
     I.NOME,
     P.NOME,
@@ -51,4 +135,3 @@ FROM
 ORDER BY
     I.NOME,
     NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) DESC;
-
