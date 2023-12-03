@@ -2,7 +2,7 @@ from controller.controller import GameController
 
 def main():
     controller = GameController()
-    controller.startGameLoop()
+    controller.mainScreen()
 
 if __name__ == "__main__":
     main()

@@ -35,3 +35,20 @@ SELECT G.recurso, SUM(G.qtd)
 
 
 -- Estruturas que um planeta consegue construir com os recursos que tem (Divisão relacional)
+
+SELECT 
+    I.NOME,
+    P.NOME,
+    I.COR,
+    NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) AS PODER
+FROM
+    PLANETA P
+    JOIN COLONIA C
+        ON P.NOME = C.PLANETA
+            AND C.TURNO_INICIAL <= :TURNO AND (C.TURNO_FINAL >= :TURNO OR C.TURNO_FINAL IS NULL)
+    JOIN IMPERIO I
+        ON I.NOME = C.IMPERIO
+ORDER BY
+    I.NOME,
+    NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) DESC;
+
