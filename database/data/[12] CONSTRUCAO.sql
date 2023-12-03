@@ -3,6 +3,9 @@ INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', '
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'FAZENDA', 3, 137);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'PEDREIRA', 3, 77);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'LENHA', 3, 224);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'MADEIREIRA', 3, 1);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'FABRICA DE CHIP', 3, 2);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'FABRICA DE NAVE', 3, 5);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'BATALHAO', 3, 114);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'UNIVERSIDADE', 3, 46);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'FAZENDA', 3, 42);
@@ -28,6 +31,10 @@ INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', '
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'FAZENDA', 5, 234);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'PEDREIRA', 5, 184);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'LENHA', 5, 4);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'MADEIREIRA', 5, 10);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'FABRICA DE CHIP', 5, 3);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'FABRICA DE NAVE', 5, 25);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TERRA', 'FABRICA DE GERADOR', 5, 1);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'BATALHAO', 5, 132);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'UNIVERSIDADE', 5, 121);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'FAZENDA', 5, 132);

@@ -54,6 +54,31 @@ FROM
         E.NOME;
 
 
--- o planeta A consegue construir a estrutura X com o estoque que ele tem (divisão relacional)
+-- o planeta A consegue construir a estrutura X com o estoque que ele tem 
+SELECT
+    MIN((NVL(E.QUANTIDADE, 0) - R.QTD)) AS PODE_CONSTRUIR
+FROM
+    RECURSO_PARA_ESTRUTURA R
+    RIGHT JOIN ESTOQUE E
+        ON R.RECURSO = E.RECURSO
+WHERE
+    E.PLANETA = :PLANETA AND E.TURNO = :TURNO AND R.ESTRUTURA = :ESTRUTURA;
 
--- quantas construções um povo atuou
+-- Construções que a população de um planeta não atuou em um turno (divisão relacional)
+SELECT
+    C.ESTRUTURA,
+    C.QUANTIDADE
+FROM
+    CONSTRUCAO C
+WHERE 
+    C.PLANETA = :PLANETA AND C.TURNO = :TURNO AND C.QUANTIDADE > 0
+MINUS
+SELECT
+    C.ESTRUTURA,
+    C.QUANTIDADE
+FROM
+    ATUACAO A 
+    JOIN CONSTRUCAO C
+        ON A.PLANETA_CONSTRUCAO = C.PLANETA AND A.ESTRUTURA = C.ESTRUTURA AND A.TURNO_CONSTRUCAO = C.TURNO
+WHERE 
+    C.PLANETA = :PLANETA AND C.TURNO = :TURNO;
