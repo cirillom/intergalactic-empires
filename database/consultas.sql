@@ -70,7 +70,7 @@ FROM
         E.NOME;
 
 
--- o planeta A consegue construir a estrutura X com o estoque que ele tem 
+-- o planeta A consegue construir a estrutura X com o estoque que ele tem  (-1 é falso e maior igual a 0 verdadeiro)
 SELECT
     MIN((NVL(E.QUANTIDADE, 0) - R.QTD)) AS PODE_CONSTRUIR
 FROM
