@@ -135,9 +135,7 @@ ORDER BY
 
 
 --Estimativa de Potencial de Poder de Cada Colônia de um dado Império em um dado Turno
-SELECT 
-    I.NOME,
-    I.COR,
+SELECT
     P.NOME,
     NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) AS PODER
 FROM
