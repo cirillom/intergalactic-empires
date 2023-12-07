@@ -61,6 +61,7 @@ ORDER BY
 
 
 -- Quantidade de individuos de cada especie morto nas batalhas de um império
+-- !incorreto
 SELECT
     E.NOME AS ESPECIE,
     NVL(SUM(PM.QTD), 0) AS MORTOS
@@ -90,6 +91,7 @@ WHERE
 
 
 -- Construções que a população de um planeta não atuou em um turno (divisão relacional)
+--! incorreto
 SELECT
     C.ESTRUTURA,
     C.QUANTIDADE
