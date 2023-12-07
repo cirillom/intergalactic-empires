@@ -1,4 +1,4 @@
--- Quantidade de recursos de um império em um turno
+-- Quantidade de Recursos de dado Império em um dado Turno
 SELECT
     E.RECURSO,
     NVL(SUM(E.QUANTIDADE), 0) AS QUANTIDADE
@@ -18,7 +18,7 @@ ORDER BY
 ;
 
 
--- Quantidade de recursos gerados por um império (soma de tudo gerado em todas as atuações)
+-- Quantidade de Recursos Produzidos por um dado Império até o Turno Atual (soma de tudo gerado em todas as atuações)
 SELECT
     R.NOME AS RECURSO,
     NVL(SUM(G.QTD), 0) AS QUANTIDADE
@@ -38,7 +38,7 @@ ORDER BY
 ;
 
 
--- Quantidade de civis transformados de cada especie por um império
+-- Quantidade de Civis Especializados de cada Espécie por Determinado Império até o Turno Atual
 -- Especie | qtd
 -- Humanos | 25980
 -- Navi | 0
@@ -60,7 +60,7 @@ ORDER BY
 ;
 
 
--- Quantidade de individuos de cada especie morto nas batalhas de um império
+-- Quantidade de Indivíduos de Cada Espécie Mortos em Batalhas Protagonizadas por dado Império
 -- !incorreto
 SELECT
     E.NOME AS ESPECIE,
@@ -78,7 +78,7 @@ FROM
 ;
 
 
--- o planeta A consegue construir a estrutura X com o estoque que ele tem  (-1 é falso e maior igual a 0 verdadeiro)
+-- Checagem se dado Império Consegue Construir Dada Estrutura com seu Estoque Disponível em dado Turno  (-1 é falso e maior igual a 0 verdadeiro)
 SELECT
     MIN((NVL(E.QUANTIDADE, 0) - R.QTD)) AS PODE_CONSTRUIR
 FROM
@@ -114,7 +114,7 @@ WHERE
 
 --!CONSULTAS DO JOGO
 
--- imperio por ordem de poder total (soma do poder de todas as colonias)
+-- Classificação dos Impérios por Estimativa de Potencial de Poder Total em Dado Turno (soma do poder de todas as colonias)
 SELECT 
     C.IMPERIO,
     I.COR,
@@ -134,11 +134,11 @@ ORDER BY
 ;
 
 
---poder de cada colonia de um imperio em um turno
+--Estimativa de Potencial de Poder de Cada Colônia de um dado Império em um dado Turno
 SELECT 
     I.NOME,
-    P.NOME,
     I.COR,
+    P.NOME,
     NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) AS PODER
 FROM
     PLANETA P
@@ -147,6 +147,7 @@ FROM
             AND C.TURNO_INICIAL <= :TURNO AND (C.TURNO_FINAL >= :TURNO OR C.TURNO_FINAL IS NULL)
     JOIN IMPERIO I
         ON I.NOME = C.IMPERIO
+WHERE I.NOME = :IMPERIO
 ORDER BY
     I.NOME,
     NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) DESC
