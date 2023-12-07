@@ -14,7 +14,9 @@ WHERE
 GROUP BY
     E.RECURSO
 ORDER BY
-    E.RECURSO;
+    E.RECURSO
+;
+
 
 -- Quantidade de recursos gerados por um império (soma de tudo gerado em todas as atuações)
 SELECT
@@ -32,14 +34,15 @@ FROM
 GROUP BY
     R.NOME
 ORDER BY
-    R.NOME;
+    R.NOME
+;
+
 
 -- Quantidade de civis transformados de cada especie por um império
 -- Especie | qtd
 -- Humanos | 25980
 -- Navi | 0
 -- [...]
-
 SELECT 
     E.NOME AS ESPECIE,
     NVL(SUM(A.QTD_TRABALHADORES), 0) AS CIVIS
@@ -53,7 +56,8 @@ FROM
 GROUP BY
     E.NOME
 ORDER BY
-    E.NOME;
+    E.NOME
+;
 
 
 -- Quantidade de individuos de cada especie morto nas batalhas de um império
@@ -67,7 +71,10 @@ FROM
     RIGHT JOIN ESPECIE E
         ON PM.ESPECIE = E.NOME
     GROUP BY
-        E.NOME;
+        E.NOME
+    ORDER BY
+        E.NOME
+;
 
 
 -- o planeta A consegue construir a estrutura X com o estoque que ele tem  (-1 é falso e maior igual a 0 verdadeiro)
@@ -78,7 +85,9 @@ FROM
     RIGHT JOIN ESTOQUE E
         ON R.RECURSO = E.RECURSO
 WHERE
-    E.PLANETA = :PLANETA AND E.TURNO = :TURNO AND R.ESTRUTURA = :ESTRUTURA;
+    E.PLANETA = :PLANETA AND E.TURNO = :TURNO AND R.ESTRUTURA = :ESTRUTURA
+;
+
 
 -- Construções que a população de um planeta não atuou em um turno (divisão relacional)
 SELECT
@@ -97,7 +106,9 @@ FROM
     JOIN CONSTRUCAO C
         ON A.PLANETA_CONSTRUCAO = C.PLANETA AND A.ESTRUTURA = C.ESTRUTURA AND A.TURNO_CONSTRUCAO = C.TURNO
 WHERE 
-    C.PLANETA = :PLANETA AND C.TURNO = :TURNO;
+    C.PLANETA = :PLANETA AND C.TURNO = :TURNO
+;
+
 
 --!CONSULTAS DO JOGO
 
@@ -117,7 +128,9 @@ GROUP BY
     C.IMPERIO,
     I.COR
 ORDER BY
-    NVL(SUM(P.QTD_AGUA * P.ESTRUTURAS_MAX), 0) DESC;
+    NVL(SUM(P.QTD_AGUA * P.ESTRUTURAS_MAX), 0) DESC
+;
+
 
 --poder de cada colonia de um imperio em um turno
 SELECT 
@@ -134,4 +147,5 @@ FROM
         ON I.NOME = C.IMPERIO
 ORDER BY
     I.NOME,
-    NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) DESC;
+    NVL(P.QTD_AGUA * P.ESTRUTURAS_MAX, 0) DESC
+;
