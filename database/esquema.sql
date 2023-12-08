@@ -1,7 +1,7 @@
 --entidades sem chaves estrangeiras
         -- Cria a tabela IMPERIO
         CREATE TABLE IMPERIO(
-            nome VARCHAR2(50),
+            nome VARCHAR2(50) NOT NULL,
             cor VARCHAR2(50) NOT NULL,
             qtd_planetas_dominados NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_IMPERIO PRIMARY KEY(nome),
@@ -11,7 +11,7 @@
 
         -- Cria a tabela PLANETA
         CREATE TABLE PLANETA (
-            nome VARCHAR2(50),
+            nome VARCHAR2(50) NOT NULL,
             coordenadas VARCHAR2(50) NOT NULL,
             atmosfera NUMBER(4,1) NOT NULL,
             populacao_max NUMBER(12) NOT NULL,
@@ -31,12 +31,12 @@
             CONSTRAINT CK_PLANETA_GRAVIDADE CHECK(gravidade >= 0),
             CONSTRAINT CK_PLANETA_QTD_AGUA CHECK(qtd_agua >= 0),
             CONSTRAINT CK_PLANETA_FERTILIDADE CHECK(fertilidade >= 0),
-            CONSTRAINT CK_PLANETA_PODERIO_MILITAR CHECK(poderio_militar >= 0)
+            CONSTRAINT CK_PLANETA_PODERIO_MILITAR CHECK(poderio_militar >= 0 OR poderio_militar IS NULL)
         );
 
         -- Cria a tabela ESPECIE
         CREATE TABLE ESPECIE(
-            nome VARCHAR2(50),
+            nome VARCHAR2(50) NOT NULL,
             conformidade NUMBER(4,3) NOT NULL,
             trabalho NUMBER(4,3) NOT NULL,
             agressividade NUMBER(4,3) NOT NULL,
@@ -66,7 +66,7 @@
 
         -- Cria a tabela RECURSOS
         CREATE TABLE RECURSOS (
-            nome VARCHAR2(50),
+            nome VARCHAR2(50) NOT NULL,
             volume NUMBER(6) NOT NULL,
             CONSTRAINT PK_RECURSOS PRIMARY KEY(nome),
             CONSTRAINT CK_RECURSOS_VOLUME CHECK(volume >= 0)
@@ -74,7 +74,7 @@
 
         -- Cria a tabela TECNOLOGIA
         CREATE TABLE TECNOLOGIA(
-            nome VARCHAR2(50),
+            nome VARCHAR2(50) NOT NULL,
             nivel NUMBER(1) DEFAULT 0 NOT NULL,
             complexidade NUMBER(3,3) NOT NULL,
             eficiencia_produtiva NUMBER(3,3),
@@ -85,15 +85,15 @@
             CONSTRAINT CK_TECNOLOGIA_NOME CHECK(nome IN ('TRANSPORTE', 'ARMAMENTO', 'MANUFATURA')),
             CONSTRAINT CK_TECNOLOGIA_NIVEL CHECK(nivel >= 0),
             CONSTRAINT CK_TECNOLOGIA_COMPLEXIDADE CHECK(complexidade >= 0 AND complexidade <= 1),
-            CONSTRAINT CK_TECNOLOGIA_EFICIENCIA_PRODUTIVA CHECK(eficiencia_produtiva >= 0 AND eficiencia_produtiva <= 1),
-            CONSTRAINT CK_TECNOLOGIA_PODER_DESTRUTIVO CHECK(poder_destrutivo >= 0),
-            CONSTRAINT CK_TECNOLOGIA_CAPACIDADE_DE_TRANSPORTE CHECK(capacidade_de_transporte >= 0),
-            CONSTRAINT CK_TECNOLOGIA_ALCANCE CHECK(alcance >= 0)
+            CONSTRAINT CK_TECNOLOGIA_EFICIENCIA_PRODUTIVA CHECK((eficiencia_produtiva >= 0 AND eficiencia_produtiva <= 1) OR eficiencia_produtiva IS NULL),
+            CONSTRAINT CK_TECNOLOGIA_PODER_DESTRUTIVO CHECK(poder_destrutivo >= 0 OR poder_destrutivo IS NULL),
+            CONSTRAINT CK_TECNOLOGIA_CAPACIDADE_DE_TRANSPORTE CHECK(capacidade_de_transporte >= 0 OR capacidade_de_transporte IS NULL),
+            CONSTRAINT CK_TECNOLOGIA_ALCANCE CHECK(alcance >= 0 OR capacidade_de_transporte IS NULL)
         );
 
         -- Cria a tabela ESTRUTURA
         CREATE TABLE ESTRUTURA(
-            nome VARCHAR2(50),
+            nome VARCHAR2(50) NOT NULL,
             tipo VARCHAR2(50) NOT NULL,
             eficiencia NUMBER(3,3) NOT NULL,
             lotacao_maxima NUMBER(12) NOT NULL,
@@ -108,7 +108,7 @@
 
         -- Cria a tabela INDUSTRIA
         CREATE TABLE INDUSTRIA(
-            estrutura VARCHAR2(50),
+            estrutura VARCHAR2(50) NOT NULL,
             recurso_gerado VARCHAR2(50),
             CONSTRAINT PK_INDUSTRIA PRIMARY KEY(estrutura),
             CONSTRAINT FK_INDUSTRIA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
@@ -117,8 +117,8 @@
 
         -- Cria a tabela RECURSO_PARA_ESTRUTURA
         CREATE TABLE RECURSO_PARA_ESTRUTURA(
-            estrutura VARCHAR2(50),
-            recurso VARCHAR2(50),
+            estrutura VARCHAR2(50) NOT NULL,
+            recurso VARCHAR2(50) NOT NULL,
             qtd NUMBER(12) NOT NULL,
             CONSTRAINT PK_RECURSO_PARA_ESTRUTURA PRIMARY KEY(estrutura, recurso),
             CONSTRAINT FK_RECURSO_PARA_ESTRUTURA_ESTRUTURA FOREIGN KEY(estrutura) REFERENCES ESTRUTURA(nome) ON DELETE CASCADE,
@@ -128,9 +128,9 @@
         
         -- Cria a tabela RECURSO_PRECISA_TECNOLOGIA
         CREATE TABLE RECURSO_PRECISA_TECNOLOGIA(
-            nome VARCHAR2(50),
-            nivel NUMBER(1) DEFAULT 0,
-            recurso VARCHAR2(50),
+            nome VARCHAR2(50) NOT NULL,
+            nivel NUMBER(1) DEFAULT 0 NOT NULL,
+            recurso VARCHAR2(50) NOT NULL,
             CONSTRAINT PK_RECURSO_PRECISA_TECNOLOGIA PRIMARY KEY(nome, nivel, recurso),
             CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel) ON DELETE CASCADE,
             CONSTRAINT FK_RECURSO_PRECISA_TECNOLOGIA_RECURSO FOREIGN KEY(recurso) REFERENCES RECURSOS(nome) ON DELETE CASCADE
@@ -138,10 +138,10 @@
         
         -- Cria a tabela POVO
         CREATE TABLE POVO(
-            planeta VARCHAR2(50),
-            especie VARCHAR2(50),
-            tipo VARCHAR2(9),
-            turno NUMBER(4) DEFAULT 0,
+            planeta VARCHAR2(50) NOT NULL,
+            especie VARCHAR2(50) NOT NULL,
+            tipo VARCHAR2(9) NOT NULL,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
             qtd NUMBER(12) NOT NULL,
             CONSTRAINT PK_POVO PRIMARY KEY(planeta, especie, tipo, turno),
             CONSTRAINT FK_POVO_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
@@ -153,23 +153,23 @@
 
         -- Cria a tabela COLONIA
         CREATE TABLE COLONIA(
-            imperio VARCHAR2(50),
-            planeta VARCHAR2(50),
-            turno_inicial NUMBER(4) DEFAULT 0,
-            turno_final NUMBER(4),
+            imperio VARCHAR2(50) NOT NULL,
+            planeta VARCHAR2(50) NOT NULL,
+            turno_inicial NUMBER(4) DEFAULT 0 NOT NULL,
+            turno_final NUMBER(4) NOT NULL,
             CONSTRAINT PK_COLONIA PRIMARY KEY(imperio, planeta, turno_inicial),
             CONSTRAINT FK_COLONIA_IMPERIO FOREIGN KEY(imperio) REFERENCES IMPERIO(nome),
             CONSTRAINT FK_COLONIA_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
             CONSTRAINT CK_COLONIA_TURNO_INICIAL CHECK(turno_inicial >= 0),
-            CONSTRAINT CK_COLONIA_TURNO_FINAL CHECK(turno_final >= turno_inicial)
+            CONSTRAINT CK_COLONIA_TURNO_FINAL CHECK(turno_final >= turno_inicial OR turno_final IS NULL) 
         );
         
         -- Cria a tabela PRIORIDADE_PRODUCAO
         CREATE TABLE PRIORIDADE_PRODUCAO(
-            planeta VARCHAR2(50),
-            recurso VARCHAR2(50),
-            turno NUMBER(4) DEFAULT 0,
-            ordem NUMBER(4),
+            planeta VARCHAR2(50) NOT NULL,
+            recurso VARCHAR2(50) NOT NULL,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
+            ordem NUMBER(4) NOT NULL,
             CONSTRAINT PK_PRIORIDADE_PRODUCAO PRIMARY KEY(planeta, recurso, turno, ordem),
             CONSTRAINT UQ_PRIORIDADE_PRODUCAO_RECURSO UNIQUE(planeta, turno, ordem),
             CONSTRAINT UQ_PRIORIDADE_PRODUCAO_ORDEM UNIQUE (planeta, recurso, turno),
@@ -181,9 +181,9 @@
         
         -- Cria a tabela ESTOQUE
         CREATE TABLE ESTOQUE(
-            planeta VARCHAR2(50),
-            recurso VARCHAR2(50),
-            turno NUMBER(4) DEFAULT 0,
+            planeta VARCHAR2(50) NOT NULL,
+            recurso VARCHAR2(50) NOT NULL,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
             quantidade NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_ESTOQUE PRIMARY KEY(planeta, recurso, turno),
             CONSTRAINT FK_ESTOQUE_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
@@ -194,9 +194,9 @@
         
         -- Cria a tabela CONSTRUCAO
         CREATE TABLE CONSTRUCAO(
-            planeta VARCHAR2(50),
-            estrutura VARCHAR2(50),
-            turno NUMBER(4) DEFAULT 0,
+            planeta VARCHAR2(50) NOT NULL,
+            estrutura VARCHAR2(50) NOT NULL,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
             quantidade NUMBER(7) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_CONSTRUCAO PRIMARY KEY(planeta, estrutura, turno),
             CONSTRAINT FK_CONSTRUCAO_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
@@ -210,10 +210,10 @@
 
         -- Cria a tabela CIVIL
         CREATE TABLE CIVIL(
-            planeta VARCHAR2(50),
-            especie VARCHAR2(50),
+            planeta VARCHAR2(50) NOT NULL,
+            especie VARCHAR2(50) NOT NULL,
             tipo VARCHAR2(9) NOT NULL,
-            turno NUMBER(4) DEFAULT 0,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_CIVIL PRIMARY KEY(planeta, especie, turno),
             CONSTRAINT FK_CIVIL_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno) ON DELETE CASCADE,
             CONSTRAINT CK_CIVIL_TIPO CHECK(tipo IN ('CIVIL'))
@@ -221,11 +221,11 @@
 
         -- Cria a tabela BATALHA
         CREATE TABLE BATALHA(
-            id NUMBER GENERATED AS IDENTITY,
-            imperio VARCHAR2(50),
-            planeta_atacante VARCHAR2(50),
-            turno_inicial NUMBER(4),
-            planeta_defensor VARCHAR2(50),
+            id NUMBER GENERATED AS IDENTITY NOT NULL,
+            imperio VARCHAR2(50) NOT NULL,
+            planeta_atacante VARCHAR2(50) NOT NULL,
+            turno_inicial NUMBER(4) NOT NULL,
+            planeta_defensor VARCHAR2(50) NOT NULL,
             turno_batalha NUMBER(4) NOT NULL,
             planeta_vencedor VARCHAR2(50),
             poderio_atacante NUMBER(12) NOT NULL,
@@ -245,11 +245,11 @@
 
         -- Cria a tabela EXPLORACAO
         CREATE TABLE EXPLORACAO(
-            imperio VARCHAR2(50),
-            planeta_explorador VARCHAR2(50),
-            turno_inicial NUMBER(4),
-            planeta_explorado VARCHAR2(50),
-            turno NUMBER(4) DEFAULT 0,
+            imperio VARCHAR2(50) NOT NULL,
+            planeta_explorador VARCHAR2(50) NOT NULL,
+            turno_inicial NUMBER(4) NOT NULL,
+            planeta_explorado VARCHAR2(50) NOT NULL,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
             incerteza NUMBER(3,3) NOT NULL,
             poderio_militar NUMBER(12),
             atmosfera NUMBER(4,1),
@@ -264,24 +264,24 @@
             CONSTRAINT FK_EXPLORACAO_PLANETA_EXPLORADO FOREIGN KEY(planeta_explorado) REFERENCES PLANETA(nome),
             CONSTRAINT CK_EXPLORACAO_TURNO CHECK(turno >= turno_inicial),
             CONSTRAINT CK_EXPLORACAO_INCERTEZA CHECK(incerteza >= 0 AND incerteza <= 1),
-            CONSTRAINT CK_EXPLORACAO_PODERIO_MILITAR CHECK(poderio_militar >= 0),
-            CONSTRAINT CK_EXPLORACAO_ATMOSFERA CHECK(atmosfera >= 0),
-            CONSTRAINT CK_EXPLORACAO_QTD_POPULACAO CHECK(qtd_populacao >= 0),
-            CONSTRAINT CK_EXPLORACAO_QTD_ESTRUTURAS CHECK(qtd_estruturas >= 0),
-            CONSTRAINT CK_EXPLORACAO_QTD_AGUA CHECK(qtd_agua >= 0),
-            CONSTRAINT CK_EXPLORACAO_GRAVIDADE CHECK(gravidade >= 0),
-            CONSTRAINT CK_EXPLORACAO_TEMPERATURA CHECK(temperatura_kelvin >= 0),
-            CONSTRAINT CK_EXPLORACAO_FERTILIDADE CHECK(fertilidade >= 0)
+            CONSTRAINT CK_EXPLORACAO_PODERIO_MILITAR CHECK(poderio_militar >= 0 OR poderio_militar IS NULL),
+            CONSTRAINT CK_EXPLORACAO_ATMOSFERA CHECK(atmosfera >= 0 OR atmosfera IS NULL),
+            CONSTRAINT CK_EXPLORACAO_QTD_POPULACAO CHECK(qtd_populacao >= 0 OR qtd_populacao IS NULL),
+            CONSTRAINT CK_EXPLORACAO_QTD_ESTRUTURAS CHECK(qtd_estruturas >= 0 OR qtd_estruturas IS NULL),
+            CONSTRAINT CK_EXPLORACAO_QTD_AGUA CHECK(qtd_agua >= 0 OR qtd_agua IS NULL),
+            CONSTRAINT CK_EXPLORACAO_GRAVIDADE CHECK(gravidade >= 0 OR gravidade IS NULL),
+            CONSTRAINT CK_EXPLORACAO_TEMPERATURA CHECK(temperatura_kelvin >= 0 OR temperatura_kelvin IS NULL),
+            CONSTRAINT CK_EXPLORACAO_FERTILIDADE CHECK(fertilidade >= 0 OR fertilidade IS NULL)
         );
 
         -- Cria a tabela MOVE_RECURSO
         CREATE TABLE MOVE_RECURSO(
-            imperio VARCHAR2(50),
-            planeta_destino VARCHAR2(50),
-            turno_inicial NUMBER(4),
-            planeta_origem VARCHAR2(50),
-            recurso VARCHAR2(50),
-            turno NUMBER(4),
+            imperio VARCHAR2(50) NOT NULL,
+            planeta_destino VARCHAR2(50) NOT NULL,
+            turno_inicial NUMBER(4) NOT NULL,
+            planeta_origem VARCHAR2(50) NOT NULL,
+            recurso VARCHAR2(50) NOT NULL,
+            turno NUMBER(4) NOT NULL,
             qtd NUMBER(12) NOT NULL,
             qtd_naves NUMBER(12) NOT NULL,
             CONSTRAINT PK_MOVE_RECURSO PRIMARY KEY(imperio, planeta_destino, turno_inicial, planeta_origem, recurso, turno),
@@ -294,13 +294,13 @@
 
         -- Cria a tabela MOVE_POVO
         CREATE TABLE MOVE_POVO(
-            imperio VARCHAR2(50),
-            planeta_destino VARCHAR2(50),
-            turno_inicial NUMBER(4),
-            planeta_origem VARCHAR2(50),
-            especie VARCHAR2(50),
-            tipo VARCHAR2(9),
-            turno NUMBER(4),
+            imperio VARCHAR2(50) NOT NULL,
+            planeta_destino VARCHAR2(50) NOT NULL,
+            turno_inicial NUMBER(4) NOT NULL,
+            planeta_origem VARCHAR2(50) NOT NULL,
+            especie VARCHAR2(50) NOT NULL,
+            tipo VARCHAR2(9) NOT NULL,
+            turno NUMBER(4) NOT NULL,
             qtd NUMBER(12) NOT NULL,
             qtd_naves NUMBER(12) NOT NULL,
             CONSTRAINT PK_MOVE_POVO PRIMARY KEY(imperio, planeta_destino, turno_inicial, planeta_origem, especie, tipo, turno),
@@ -313,11 +313,11 @@
 
         -- Cria a tabela POVO_MORTO_BATALHA
         CREATE TABLE POVO_MORTO_BATALHA(
-            id_batalha NUMBER(12),
-            planeta VARCHAR2(50),
-            especie VARCHAR2(50),
-            tipo VARCHAR2(9),
-            turno NUMBER(4) DEFAULT 0,
+            id_batalha NUMBER(12) NOT NULL,
+            planeta VARCHAR2(50) NOT NULL,
+            especie VARCHAR2(50) NOT NULL,
+            tipo VARCHAR2(9) NOT NULL,
+            turno NUMBER(4) DEFAULT 0 NOT NULL,
             qtd NUMBER(12) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_POVO_MORTO_BATALHA PRIMARY KEY(id_batalha, planeta, especie, tipo, turno),
             CONSTRAINT FK_POVO_MORTO_BATALHA_BATALHA FOREIGN KEY(id_batalha) REFERENCES BATALHA(id),
@@ -327,12 +327,12 @@
 
         -- Cria a tabela CONHECIMENTO
         CREATE TABLE CONHECIMENTO(
-            planeta VARCHAR2(50),
-            especie VARCHAR2(50),
+            planeta VARCHAR2(50) NOT NULL,
+            especie VARCHAR2(50) NOT NULL,
             tipo VARCHAR2(9) NOT NULL,
             turno NUMBER(4) NOT NULL,
-            nome VARCHAR2(50),
-            nivel NUMBER(1) DEFAULT 0,
+            nome VARCHAR2(50) NOT NULL,
+            nivel NUMBER(1) DEFAULT 0 NOT NULL,
             CONSTRAINT PK_CONHECIMENTO PRIMARY KEY(planeta, especie, nome, nivel),
             CONSTRAINT FK_CONHECIMENTO_POVO FOREIGN KEY(planeta, especie, tipo, turno) REFERENCES POVO(planeta, especie, tipo, turno),
             CONSTRAINT FK_CONHECIMENTO_TECNOLOGIA FOREIGN KEY(nome, nivel) REFERENCES TECNOLOGIA(nome, nivel),
@@ -342,12 +342,12 @@
         -- Cria a tabela ATUACAO
         CREATE TABLE ATUACAO(
             id NUMBER GENERATED AS IDENTITY,
-            planeta_construcao VARCHAR2(50),
-            estrutura VARCHAR2(50),
-            turno_construcao NUMBER(4),
-            planeta_civil VARCHAR2(50),
-            especie VARCHAR2(50),
-            turno_civil NUMBER(4),
+            planeta_construcao VARCHAR2(50) NOT NULL,
+            estrutura VARCHAR2(50) NOT NULL,
+            turno_construcao NUMBER(4) NOT NULL,
+            planeta_civil VARCHAR2(50) NOT NULL,
+            especie VARCHAR2(50) NOT NULL,
+            turno_civil NUMBER(4) NOT NULL,
             qtd_trabalhadores NUMBER(12) NOT NULL,
             CONSTRAINT PK_ATUACAO PRIMARY KEY(id),
             CONSTRAINT UQ_ATUACAO UNIQUE(planeta_construcao, estrutura, especie, turno_civil),
@@ -360,8 +360,8 @@
 
         -- Cria a tabela GERA_RECURSO
         CREATE TABLE GERA_RECURSO(
-            id_atuacao NUMBER(10),
-            recurso VARCHAR2(50),
+            id_atuacao NUMBER(10) NOT NULL,
+            recurso VARCHAR2(50) NOT NULL,
             qtd NUMBER(12) NOT NULL,
             CONSTRAINT PK_GERA_RECURSO PRIMARY KEY(id_atuacao, recurso),
             CONSTRAINT FK_GERA_RECURSO_ATUACAO FOREIGN KEY(id_atuacao) REFERENCES ATUACAO(id) ON DELETE CASCADE,
@@ -371,10 +371,10 @@
 
         -- Cria a tabela ESTOQUE_GASTO_BATALHA
         CREATE TABLE ESTOQUE_GASTO_BATALHA(
-            id_batalha NUMBER(12),
-            planeta VARCHAR2(50),
-            recurso VARCHAR2(50),
-            turno NUMBER(4),
+            id_batalha NUMBER(12) NOT NULL,
+            planeta VARCHAR2(50) NOT NULL,
+            recurso VARCHAR2(50) NOT NULL,
+            turno NUMBER(4) NOT NULL,
             qtd NUMBER(12) NOT NULL,
             CONSTRAINT PK_ESTOQUE_GASTO_BATALHA PRIMARY KEY(id_batalha, planeta, recurso, turno),
             CONSTRAINT FK_ESTOQUE_GASTO_BATALHA_ID_BATALHA FOREIGN KEY(id_batalha) REFERENCES BATALHA(id),
