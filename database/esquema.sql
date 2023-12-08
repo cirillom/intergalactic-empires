@@ -156,7 +156,7 @@
             imperio VARCHAR2(50) NOT NULL,
             planeta VARCHAR2(50) NOT NULL,
             turno_inicial NUMBER(4) DEFAULT 0 NOT NULL,
-            turno_final NUMBER(4) NOT NULL,
+            turno_final NUMBER(4),
             CONSTRAINT PK_COLONIA PRIMARY KEY(imperio, planeta, turno_inicial),
             CONSTRAINT FK_COLONIA_IMPERIO FOREIGN KEY(imperio) REFERENCES IMPERIO(nome),
             CONSTRAINT FK_COLONIA_PLANETA FOREIGN KEY(planeta) REFERENCES PLANETA(nome),
