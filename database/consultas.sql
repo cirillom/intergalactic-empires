@@ -61,7 +61,6 @@ ORDER BY
 
 
 -- Quantidade de Indivíduos de Cada Espécie Mortos em Batalhas Protagonizadas por dado Império
--- !incorreto
 SELECT
     E.NOME AS ESPECIE,
     NVL(SUM(PM.QTD), 0) AS MORTOS
@@ -112,7 +111,7 @@ WHERE
 ;
 
 
---!CONSULTAS DO JOGO
+--CONSULTAS DO PROTOTIPO DO JOGO
 
 -- Classificação dos Impérios por Estimativa de Potencial de Poder Total em Dado Turno (soma do poder de todas as colonias)
 SELECT 

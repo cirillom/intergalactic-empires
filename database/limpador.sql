@@ -1,3 +1,4 @@
+-- Código para limpar todas as relações do BD
 -- select 'drop table '||table_name||' cascade constraints;' from user_tables;
     drop table ATUACAO cascade constraints;
     drop table BATALHA cascade constraints;
