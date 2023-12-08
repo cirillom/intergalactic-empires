@@ -89,27 +89,35 @@ WHERE
 ;
 
 
--- Construções que a população de um planeta não atuou em um turno (divisão relacional)
---! incorreto
+-- planetas que tem todas as estruturas avançadas (divisão relacional)
+WITH ESTRUTURAS_AVANCADAS AS (
+    SELECT
+        E.NOME
+    FROM
+        ESTRUTURA E
+    WHERE
+        E.TIPO = 'INDUSTRIA'
+        AND (E.NOME IN ('PEDREIRA TECNOLOGICA', 'MINERADORA', 'FABRICA DE CHIP AUTOMATICA', 'FABRICA DE NAVE ROBOTIZADA', 'INDUSTRIA DE ARMAS ROBOTIZADA', 'FABRICA DE GERADOR'))
+)
 SELECT
-    C.ESTRUTURA,
-    C.QUANTIDADE
+    P.NOME
 FROM
-    CONSTRUCAO C
-WHERE 
-    C.PLANETA = :PLANETA AND C.TURNO = :TURNO AND C.QUANTIDADE > 0
-MINUS
-SELECT
-    C.ESTRUTURA,
-    C.QUANTIDADE
-FROM
-    ATUACAO A 
-    JOIN CONSTRUCAO C
-        ON A.PLANETA_CONSTRUCAO = C.PLANETA AND A.ESTRUTURA = C.ESTRUTURA AND A.TURNO_CONSTRUCAO = C.TURNO
-WHERE 
-    C.PLANETA = :PLANETA AND C.TURNO = :TURNO
+    PLANETA P
+WHERE
+    NOT EXISTS ( (
+        SELECT
+            ES.NOME
+        FROM
+            ESTRUTURAS_AVANCADAS ES
+    ) MINUS (
+        SELECT
+            C.ESTRUTURA
+        FROM
+            CONSTRUCAO C
+        WHERE
+            C.PLANETA = P.NOME
+    ) )
 ;
-
 
 --CONSULTAS DO PROTOTIPO DO JOGO
 

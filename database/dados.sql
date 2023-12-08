@@ -775,6 +775,18 @@ INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VULCAN', 
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VULCAN', 'FAZENDA', 5, 228);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VULCAN', 'PEDREIRA', 5, 122);
 INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VULCAN', 'LENHA', 5, 244);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'PEDREIRA TECNOLOGICA', 5, 1);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'MINERADORA', 5, 1);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'FABRICA DE CHIP AUTOMATICA' , 5, 2);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'FABRICA DE NAVE ROBOTIZADA', 5, 1);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'INDUSTRIA DE ARMAS ROBOTIZADA', 5, 3);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('TRANTOR', 'FABRICA DE GERADOR', 5, 1);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VILTRUM', 'PEDREIRA TECNOLOGICA', 5, 1);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VILTRUM', 'MINERADORA', 5, 2);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VILTRUM', 'FABRICA DE CHIP AUTOMATICA' , 5, 4);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VILTRUM', 'FABRICA DE NAVE ROBOTIZADA', 5, 4);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VILTRUM', 'INDUSTRIA DE ARMAS ROBOTIZADA', 5, 3);
+INSERT INTO CONSTRUCAO(planeta, estrutura, turno, quantidade) VALUES ('VILTRUM', 'FABRICA DE GERADOR', 5, 2);
 
 
 -- [13] POVO
@@ -1291,3 +1303,5 @@ INSERT INTO MOVE_POVO(imperio, planeta_destino, turno_inicial, planeta_origem, e
 -- [24] MOVE_RECURSO
 INSERT INTO MOVE_RECURSO(imperio, planeta_destino, turno_inicial, planeta_origem, recurso, turno, qtd, qtd_naves) VALUES ('ROMANO', 'KRYPTON', 0, 'TRANTOR', 'GERADOR', 3, 100, 5);
 INSERT INTO MOVE_RECURSO(imperio, planeta_destino, turno_inicial, planeta_origem, recurso, turno, qtd, qtd_naves) VALUES ('MONGOL', 'TERRA', 3, 'PANDORA', 'COMIDA', 6, 240000, 6);
+
+
