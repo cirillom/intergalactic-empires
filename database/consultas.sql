@@ -44,7 +44,7 @@ ORDER BY
 -- Humanos | 25980
 -- Navi | 0
 -- [...]
-SELECT 
+SELECT
     E.NOME AS ESPECIE,
     NVL(SUM(A.QTD_TRABALHADORES), 0) AS CIVIS
 FROM
