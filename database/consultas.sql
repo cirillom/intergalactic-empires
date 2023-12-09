@@ -18,7 +18,7 @@ ORDER BY
 ;
 
 
--- Quantidade de Recursos Produzidos por um dado Império até o Turno Atual (soma de tudo gerado em todas as atuações)
+-- Quantidade de Recursos Produzidos por um dado Império até Dado Turno (soma de tudo gerado em todas as atuações)
 SELECT
     R.NOME AS RECURSO,
     NVL(SUM(G.QTD), 0) AS QUANTIDADE
@@ -39,7 +39,7 @@ ORDER BY
 ;
 
 
--- Quantidade de Civis Especializados de cada Espécie por Determinado Império até o Turno Atual
+-- Quantidade de Civis Especializados de cada Espécie por Determinado Império até Dado Turno
 -- Especie | qtd
 -- Humanos | 25980
 -- Navi | 0
