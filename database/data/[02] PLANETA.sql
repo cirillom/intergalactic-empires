@@ -1,8 +1,0 @@
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('TERRA', '-25, 10', 5.972E24, 25E9, 101.3, 287, 200, 9.8, 0.71, 0.1);
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('ARRAKIS', '-10, -20', 4.5E24, 1E9, 85, 320, 50, 12.3, 0.01, 0.01);
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('TRANTOR', '10, 10', 7E24, 100E9, 120, 290, 1000, 10.5, 0.05, 0.005);
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('PANDORA', '-60, -40', 3E24, 500E6, 95, 290, 10, 7.2, 0.85, 0.2);
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('TATOOINE', '40, 20', 4E24, 200E6, 90, 315, 10, 9.1, 0.05, 0.01);
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('VULCAN', '0, 20', 5.5E24, 6E9, 105, 300, 50, 9.9, 0.1, 0.05);
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('KRYPTON', '40, -25', 6E24, 20E9, 130, 250, 800, 22.3, 0.2, 0.15);
-INSERT INTO PLANETA (nome, coordenadas, massa, populacao_max, atmosfera, temperatura_kelvin, estruturas_max, gravidade, qtd_agua, fertilidade) VALUES ('VILTRUM', '-50, 50', 5E24, 10E9, 110, 275, 400, 19.7, 0.4, 0.25);
