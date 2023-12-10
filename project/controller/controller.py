@@ -7,56 +7,58 @@ from view.viewBuilder import ViewBuilder
 from models.empire import Empires
 from models.planet import Planets
 from models.colony import Colonies
+from controller.database import DataBase
 
 
 class GameController:
 
     nPlayers = 0
     
-
     def __init__(self):
         self.view = ViewBuilder()
         self.empires = Empires()
         self.planets = Planets()
         self.colonies = Colonies()
+        self.dataBase = DataBase()
 
-    def restartGame(self):
-        self.view.printSystem("Conectando...")
-        self.connection = oracledb.connect(user="a12547792",password="ChequeMate221",dsn="orclgrad1.icmc.usp.br:1521/pdb_elaine.icmc.usp.br")
-        self.cursor = self.connection.cursor()
-        try:
-            self.cursor.execute("DELETE FROM COLONIA")
-            self.cursor.execute("DELETE FROM IMPERIO")
-            self.connection.commit()
-
-        except oracledb.DatabaseError as e:
-            self.view.printSystem("Erro:{}".format(e))
-        finally:
-            self.cursor.close()
-
+    #First screen of the game
     def mainScreen(self):
+
+        #Gets the connection from database
+        connection = self.dataBase.connectToDataBase()
+
+        #Clears previous tables, create necessary ones and add the basic data necessary in the database
+        self.dataBase.setUpDataBase(connection)
         self.view.clear()
-
         self.view.printLogo()
-
         self.view.printMessage('\nPressione qualquer coisa para continuar... (-1 para sair do jogo!)')
         if input() == '-1':
             exit()
         self.view.clear()
-
         self.view.printMessage('Cadastre seu império e então tente colonizar os planetas que podem possuir mais poder!')
         self.view.printMessage('\nOs jogadores disputarão 9 planetas em 3 turnos!')
         self.view.printMessage('\nPressione qualquer coisa para continuar... (-1 para sair do jogo!)')
         if input() == '-1':
             exit()
-
-        self.restartGame()
-
+        self.restartGame(connection)
         self.view.clear()
+        self.getPlayers(connection)
 
-        self.getPlayers()
+    #Remove data from previous games
+    def restartGame(self,connection):
+        cursor = connection.cursor()
+        try:            
+            cursor.execute("DELETE FROM COLONIA")
+            cursor.execute("DELETE FROM IMPERIO")
+            connection.commit()
 
-    def getPlayers(self):
+        except oracledb.DatabaseError as e:
+            self.view.printSystem("Erro:{}".format(e))
+            connection.rollback()
+        finally:
+            cursor.close()
+
+    def getPlayers(self,connection):
 
         while(1):
             self.view.printMessage('Quantos jogadores irão jogar? (inteiro de 1 a 3)')
@@ -110,27 +112,27 @@ class GameController:
                     else:
                         self.view.printSystem('Erro! Escolha uma cor entre 1 e 4!')
 
-                if self.empires.insertEmpire(currentName,colors[colorInt-1]) == False:
+                if self.empires.insertEmpire(currentName,colors[colorInt-1],connection) == False:
                     names.append(currentName)
                     colorsForEmpires.append(colors[colorInt-1])
                     colorsUsed[colorInt-1] = True
                     break
 
-    
         self.view.clear()
-        self.empires.listEmpires()
+        self.empires.listEmpires(connection)
 
         self.view.printMessage('\nPressione qualquer coisa para continuar... (-1 para sair do jogo!)')
         if input() == '-1':
             exit()
 
         self.view.clear()
-        self.startGameLoop()
+        self.startGameLoop(connection)
     
-    def startGameLoop(self):
+    #The main loop of the game where the players conquers the planets
+    def startGameLoop(self,connection):
 
         planetsChosen = [False,False,False,False,False,False,False,False,False]
-        self.planets.getPlanetsDB()
+        self.planets.getPlanetsDB(connection)
 
         for turno in range(0,3):
             for j in range(0,self.nPlayers):
@@ -155,23 +157,24 @@ class GameController:
                         self.view.printSystem('Erro! Insira um planeta disponível!')
                         continue
 
-                    if self.colonies.insertColony(self.empires.empires[j].name,self.planets.planets[choice-1].name,turno) == False:
+                    if self.colonies.insertColony(self.empires.empires[j].name,self.planets.planets[choice-1].name,turno,connection) == False:
                         planetsChosen[choice-1] = True
                         break
 
             self.view.clear()
 
-            self.empires.printAllColoniesFromAllEmpiresInAGivenTurn(turno)
+            self.empires.printAllColoniesFromAllEmpiresInAGivenTurn(turno,connection)
 
             self.view.printMessage('\nPressione qualquer coisa para continuar... (-1 para sair do jogo!)')
+
             if input() == '-1':
                 exit()
-            self.view.clear
 
-
-        self.endGame()
+            self.view.clear()
+        self.endGame(connection)
     
-    def endGame(self):
-        self.empires.printRanking()
+    def endGame(self,connection):
+        self.empires.printRanking(connection)
         self.view.printMessage("Fim!")
+        self.dataBase.disconnectFromDataBase(connection)
         
