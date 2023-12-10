@@ -58,6 +58,7 @@ class GameController:
         finally:
             cursor.close()
 
+    #Register player empires, checking the necessary constraints
     def getPlayers(self,connection):
 
         while(1):
@@ -104,13 +105,13 @@ class GameController:
                     except:  
                         self.view.printSystem('Erro! Insira um inteiro!')
                         continue
+                    if(colorInt <= 0 or colorInt>4):
+                        self.view.printSystem('Erro! Escolha uma cor entre 1 e 4!')
+                        continue
                     if(colorsUsed[colorInt-1] == True):
                         self.view.printSystem('Erro! Insira uma cor disponível!')
                         continue
-                    if(colorInt > 0 and colorInt<=4):
-                        break
-                    else:
-                        self.view.printSystem('Erro! Escolha uma cor entre 1 e 4!')
+                    break
 
                 if self.empires.insertEmpire(currentName,colors[colorInt-1],connection) == False:
                     names.append(currentName)
@@ -173,6 +174,7 @@ class GameController:
             self.view.clear()
         self.endGame(connection)
     
+    #Print the ranking of the game, and closes the connection
     def endGame(self,connection):
         self.empires.printRanking(connection)
         self.view.printMessage("Fim!")

@@ -3,6 +3,7 @@ import platform
 
 class ViewBuilder:
     
+   #Escape sequences to print colored on console 
    SYSTEM = '\033[95m'
    BLUE = '\033[94m'
    CYAN = '\033[96m'
@@ -11,6 +12,7 @@ class ViewBuilder:
    RED = '\033[91m'
    WHITE = '\033[0m'
         
+   #Clear console according to operational system 
    def clear(self):
       system_name = platform.system()
       if system_name == 'Windows':
@@ -37,6 +39,7 @@ class ViewBuilder:
    def printSystem(self, message):
       print(self.SYSTEM+message)
         
+   #Print logo in ASCII ART     
    def printLogo(self):
       logo = self.CYAN+r""".___        __                            .__                 __  .__        
 |   | _____/  |_  ___________"""+self.YELLOW+'*'+self.CYAN+r""" _________  |  | _____ """+self.YELLOW+'*'+self.CYAN+r"""  _____/  |_|__| ____ """+self.YELLOW+'*'+self.CYAN+r"""

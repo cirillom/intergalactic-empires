@@ -10,6 +10,8 @@ class DataBase:
     def __init__(self):
         self.view = ViewBuilder()
 
+
+    #Connect to data base, it returns a connection that will be used along all of the application, it must be closed when the application finishes
     def connectToDataBase(self):
         load_dotenv()
 
@@ -23,9 +25,11 @@ class DataBase:
         connection = oracledb.connect(user=user, password=password, dsn=dsn)
         return connection
 
+    #Disconnect from a given connection
     def disconnectFromDataBase(self,connection):
         connection.close()
 
+    #Delete old tables, create new tables, insert initial necessary data on the new tables to run the game
     def setUpDataBase(self,connection):
         self.deletePreviousSchemas(connection)
         self.createSchemas(connection)
@@ -44,7 +48,6 @@ class DataBase:
 
         except oracledb.DatabaseError as e:
             self.view.printSystem("Erro:{}".format(e))
-            connection.rollback()
         finally:
             cursor.close()
 
@@ -60,12 +63,8 @@ class DataBase:
             for statement in sqlStatements:
                 if statement.strip():  # Check if statement is not empty
                     cursor.execute(statement)
-
-            connection.commit()
-
         except Exception as e:
             self.view.printSystem(f"Erro: {e}")
-            connection.rollback()
 
         finally:
             cursor.close()

@@ -15,11 +15,10 @@ class Planets:
 
     planets = []
 
-
     def __init__(self):
         self.view = ViewBuilder()
 
-
+    #Get planets from data base
     def getPlanetsDB(self,connection):
         cursor = connection.cursor()
 
@@ -42,6 +41,8 @@ class Planets:
     def listAllPlanets(self,complete):
         self.listSomePlanets([False,False,False,False,False,False,False,False,False],complete)
 
+    #List some planets: it recieves a array with 9 boolean values, if i'th boolean value is true, then print the i'th planet
+    #In this project there is 9 harcoded planets
     def listSomePlanets(self,chosed):
         for i in range(len(self.planets)):
             if chosed[i] == False:
