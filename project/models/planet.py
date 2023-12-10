@@ -15,19 +15,16 @@ class Planets:
 
     planets = []
 
-
     def __init__(self):
         self.view = ViewBuilder()
 
-
-    def getPlanetsDB(self):
-        self.view.printSystem("Conectando...")
-        self.connection = oracledb.connect(user="a12547792",password="ChequeMate221",dsn="orclgrad1.icmc.usp.br:1521/pdb_elaine.icmc.usp.br")
-        self.cursor = self.connection.cursor()
+    #Get planets from data base
+    def getPlanetsDB(self,connection):
+        cursor = connection.cursor()
 
         try:
-            self.cursor.execute("select nome, coordenadas, estruturas_max,qtd_agua from planeta")
-            rows = self.cursor.fetchall()
+            cursor.execute("select nome, coordenadas, estruturas_max,qtd_agua from planeta")
+            rows = cursor.fetchall()
             if not rows:
                 self.view.printSystem("Nenhum retorno em Planetas.")
             else:
@@ -37,10 +34,15 @@ class Planets:
                     
         except oracledb.DatabaseError as e:
             self.view.printSystem("Erro:{e}".format(e))
+        
+        finally:
+            cursor.close()
 
     def listAllPlanets(self,complete):
         self.listSomePlanets([False,False,False,False,False,False,False,False,False],complete)
 
+    #List some planets: it recieves a array with 9 boolean values, if i'th boolean value is true, then print the i'th planet
+    #In this project there is 9 harcoded planets
     def listSomePlanets(self,chosed):
         for i in range(len(self.planets)):
             if chosed[i] == False:
