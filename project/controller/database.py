@@ -52,7 +52,9 @@ class DataBase:
             cursor.close()
 
     def createSchemas(self,connection):
-        filePath = "project\esquemaAplicacao.sql"
+        #Set up path according to what will run the application
+        #filePath = r"project\esquemaAplicacao.sql" 
+        filePath = r'C:\Users\gusta\Documents\bd\intergalactic-empires\project\esquemaAplicacao.sql'
         cursor = connection.cursor()
         try:
             with open(filePath, 'r') as file:
